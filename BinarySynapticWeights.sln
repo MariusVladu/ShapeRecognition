@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29905.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinarySynapticWeights", "BinarySynapticWeights\BinarySynapticWeights.csproj", "{B28487D9-8005-48E2-BFEF-1A90E2315299}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{09268906-30B0-454C-A71B-FFF0B54B7513}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinarySynapticWeights.Tests", "Tests\BinarySynapticWeights.Tests\BinarySynapticWeights.Tests.csproj", "{69249025-FF68-456D-87A9-4C8FFAC12C15}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B28487D9-8005-48E2-BFEF-1A90E2315299}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B28487D9-8005-48E2-BFEF-1A90E2315299}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B28487D9-8005-48E2-BFEF-1A90E2315299}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B28487D9-8005-48E2-BFEF-1A90E2315299}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69249025-FF68-456D-87A9-4C8FFAC12C15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69249025-FF68-456D-87A9-4C8FFAC12C15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69249025-FF68-456D-87A9-4C8FFAC12C15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69249025-FF68-456D-87A9-4C8FFAC12C15}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{69249025-FF68-456D-87A9-4C8FFAC12C15} = {09268906-30B0-454C-A71B-FFF0B54B7513}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {14B98DB2-14FC-496B-87BB-B7D2C80895FB}
+	EndGlobalSection
+EndGlobal
