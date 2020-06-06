@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BinarySynapticWeights.cs" />
+    <Compile Include="BinarySynapticWeightsAlgorithm.cs" />
     <Compile Include="HiddenNode.cs" />
     <Compile Include="HiddenToOutputSynapticLink.cs" />
     <Compile Include="InputNode.cs" />

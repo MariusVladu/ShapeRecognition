@@ -7,12 +7,12 @@ namespace BinarySynapticWeights.Tests
     [TestClass]
     public class BinarySynapticWeightsTests
     {
-        private BinarySynapticWeights binarySynapticWeights;
+        private BinarySynapticWeightsAlgorithm binarySynapticWeights;
 
         [TestInitialize]
         public void Setup()
         {
-            binarySynapticWeights = new BinarySynapticWeights();
+            binarySynapticWeights = new BinarySynapticWeightsAlgorithm();
         }
 
         [TestMethod]
@@ -117,7 +117,7 @@ namespace BinarySynapticWeights.Tests
             var group1Samples = group1.Select(x => new Sample { InputVector = SerialCoding.GetSeriallyCodedValue(x, 100), OutputClass = "first group" });
             var group2Samples = group2.Select(x => new Sample { InputVector = SerialCoding.GetSeriallyCodedValue(x, 100), OutputClass = "second group" });
 
-            var allSamples = group1Samples.Union(group2Samples).ToList();
+            var allSamples = group1Samples.Concat(group2Samples).ToList();
 
             var valueFromGroup1 = SerialCoding.GetSeriallyCodedValue(83, 100);
 

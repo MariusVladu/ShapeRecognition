@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{09268906
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinarySynapticWeights.Tests", "Tests\BinarySynapticWeights.Tests\BinarySynapticWeights.Tests.csproj", "{69249025-FF68-456D-87A9-4C8FFAC12C15}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinarySynapticWeightsPointsApplication", "BinarySynapticWeightsPointsApplication\BinarySynapticWeightsPointsApplication.csproj", "{8FCB1BB8-43E0-4F4C-AC90-8989C51C6E77}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{69249025-FF68-456D-87A9-4C8FFAC12C15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69249025-FF68-456D-87A9-4C8FFAC12C15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69249025-FF68-456D-87A9-4C8FFAC12C15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FCB1BB8-43E0-4F4C-AC90-8989C51C6E77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FCB1BB8-43E0-4F4C-AC90-8989C51C6E77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FCB1BB8-43E0-4F4C-AC90-8989C51C6E77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FCB1BB8-43E0-4F4C-AC90-8989C51C6E77}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

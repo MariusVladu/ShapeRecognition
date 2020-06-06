@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace BinarySynapticWeights
 {
-    public class BinarySynapticWeights
+    public class BinarySynapticWeightsAlgorithm
     {
         private readonly List<InputNode> inputNodes = new List<InputNode>();
         private readonly List<HiddenNode> hiddenNodes = new List<HiddenNode>();
@@ -27,6 +27,8 @@ namespace BinarySynapticWeights
                 throw new ArgumentException($"{nameof(inputVector)} should have the same size as the samples used to train the network: {inputNodes.Count}");
             }
 
+            ResetNodeValues();
+
             ApplyVectorOnInputNodes(inputVector);
             AddWeightsToHiddenNodes();
             ApplyActivationFunctionOnHiddenNodes();
@@ -34,6 +36,19 @@ namespace BinarySynapticWeights
             ApplyActivationFunctionOnOutputNodes();
 
             return GetActivatedOutputNodeClass();
+        }
+
+        private void ResetNodeValues()
+        {
+            foreach (var hiddenNode in hiddenNodes)
+            {
+                hiddenNode.Reset();
+            }
+
+            foreach (var outputNode in outputNodes)
+            {
+                outputNode.Reset();
+            }
         }
 
         private void ApplyVectorOnInputNodes(List<int> inputVector)
@@ -79,7 +94,12 @@ namespace BinarySynapticWeights
         private string GetActivatedOutputNodeClass()
         {
             //return !outputNodes[0].IsActivated ? "first" : "second";
-            var activatedOutputNode = outputNodes.FirstOrDefault(x => x.IsActivated);
+            if (outputNodes.Count(x => x.IsActivated) > 1)
+            {
+                throw new Exception("more than 1 output node was activated");
+            }
+
+            var activatedOutputNode = outputNodes.First(x => x.IsActivated);
             if (activatedOutputNode == null)
             {
                 //return outputNodes.OrderBy(x => Math.Abs(x.Threshold - x.Value)).First().Class;
@@ -118,6 +138,7 @@ namespace BinarySynapticWeights
         private void BuildModelToRecognizeClass(string outputClass)
         {
             var enclosedSamples = new List<Sample>();
+            var processedSamples = new List<Sample>();
             var outputNode = new OutputNode
             {
                 Class = outputClass
@@ -144,7 +165,7 @@ namespace BinarySynapticWeights
                 if (GetHammingDistance(key, yes) >= GetHammingDistance(key, no))
                 {
                     distance = 1;
-                    while(distance < GetHammingDistance(key, yes))
+                    while (distance < GetHammingDistance(key, yes))
                     {
                         var samplesOfThisClassCount = samplesLookupByHammingDistanceFromKey[distance].Count(x => x.OutputClass == outputClass);
                         var samplesOfOtherClassesCount = samplesLookupByHammingDistanceFromKey[distance].Count(x => x.OutputClass != outputClass);
@@ -160,12 +181,10 @@ namespace BinarySynapticWeights
                     }
                 }
 
-                distance = Math.Max(distance - 1, 0);
-                CreateSeparationPlane(distance, key, outputNode);
-                EncloseSamplesCloserThanDistance(distance, enclosedSamples, samplesLookupByHammingDistanceFromKey);
+                CreateSeparationPlane(distance, key, outputNode, enclosedSamples, processedSamples, samplesLookupByHammingDistanceFromKey);
                 numberOfPlanesUsedForThisPattern++;
 
-                while (ThereAreEnclosedSamplesNotOfThisClass(enclosedSamples, outputClass))
+                while (ThereAreNotProcessedEnclosedSamplesNotOfThisClass(enclosedSamples, processedSamples, outputClass))
                 {
                     key = enclosedSamples.First(x => x.OutputClass != outputClass);
 
@@ -181,9 +200,9 @@ namespace BinarySynapticWeights
                     }
                     while (samplesOfThisClassCount <= samplesOfOtherClassesCount);
 
-                    distance = Math.Max(distance - 1, 0);
-                    CreateSeparationPlane(distance, key, outputNode);
-                    EncloseSamplesCloserThanDistance(distance, enclosedSamples, samplesLookupByHammingDistanceFromKey);
+                    CreateSeparationPlane(distance, key, outputNode, enclosedSamples, processedSamples, samplesLookupByHammingDistanceFromKey);
+                    processedSamples.Add(key);
+
                     numberOfPlanesUsedForThisPattern++;
                 }
 
@@ -205,12 +224,20 @@ namespace BinarySynapticWeights
             return hiddenToOutputSynapticLinks.Count(x => x.OutputNode == outputNode) - 0.5;
         }
 
-        private bool ThereAreEnclosedSamplesNotOfThisClass(List<Sample> enclosedSamples, string outputClass)
+        private bool ThereAreNotProcessedEnclosedSamplesNotOfThisClass(List<Sample> enclosedSamples, List<Sample> processedSamples, string outputClass)
         {
-            return enclosedSamples.Any(x => x.OutputClass != outputClass);
+            return enclosedSamples.Any(x => x.OutputClass != outputClass && !processedSamples.Contains(x));
         }
 
-        private void CreateSeparationPlane(int distance, Sample key, OutputNode outputNode)
+        private void CreateSeparationPlane(int distance, Sample key, OutputNode outputNode, List<Sample> enclosedSamples, List<Sample> processedSamples, ILookup<int, Sample> samplesLookupByHammingDistanceFromKey)
+        {
+            distance = Math.Max(distance - 1, 0);
+            CreateSeparationPlaneNodesAndLinks(distance, key, outputNode);
+            EncloseSamplesCloserThanDistance(distance, enclosedSamples, samplesLookupByHammingDistanceFromKey);
+            SetEnclosedSamplesOfThisClassAsProcessed(outputNode.Class, enclosedSamples, processedSamples);
+        }
+
+        private void CreateSeparationPlaneNodesAndLinks(int distance, Sample key, OutputNode outputNode)
         {
             var threshold = distance + 0.5 - key.InputVector.Count(x => x == 1);
 
@@ -242,6 +269,15 @@ namespace BinarySynapticWeights
                 {
                     enclosedSamples.Add(sample);
                 }
+            }
+        }
+
+        private void SetEnclosedSamplesOfThisClassAsProcessed(string outputClass, List<Sample> enclosedSamples, List<Sample> processedSamples)
+        {
+            foreach (var enclosedSample in enclosedSamples)
+            {
+                if (enclosedSample.OutputClass == outputClass)
+                    processedSamples.Add(enclosedSample);
             }
         }
 

@@ -17,5 +17,11 @@
                 IsActivated = false;
             }
         }
+
+        public void Reset()
+        {
+            Value = 0;
+            IsActivated = false;
+        }
     }
 }
