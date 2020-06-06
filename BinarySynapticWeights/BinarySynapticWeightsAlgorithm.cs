@@ -99,7 +99,7 @@ namespace BinarySynapticWeights
                 throw new Exception("more than 1 output node was activated");
             }
 
-            var activatedOutputNode = outputNodes.First(x => x.IsActivated);
+            var activatedOutputNode = outputNodes.FirstOrDefault(x => x.IsActivated);
             if (activatedOutputNode == null)
             {
                 //return outputNodes.OrderBy(x => Math.Abs(x.Threshold - x.Value)).First().Class;
@@ -162,9 +162,9 @@ namespace BinarySynapticWeights
                 var distance = 0;
                 var samplesLookupByHammingDistanceFromKey = samplesNotEnclosed.ToLookup(x => GetHammingDistance(key, x));
 
-                if (GetHammingDistance(key, yes) >= GetHammingDistance(key, no))
-                {
-                    distance = 1;
+                //if (GetHammingDistance(key, yes) >= GetHammingDistance(key, no))
+                //{
+                    //distance = 1;
                     while (distance < GetHammingDistance(key, yes))
                     {
                         var samplesOfThisClassCount = samplesLookupByHammingDistanceFromKey[distance].Count(x => x.OutputClass == outputClass);
@@ -179,14 +179,14 @@ namespace BinarySynapticWeights
                             distance++;
                         }
                     }
-                }
+                //}
 
                 CreateSeparationPlane(distance, key, outputNode, enclosedSamples, processedSamples, samplesLookupByHammingDistanceFromKey);
                 numberOfPlanesUsedForThisPattern++;
 
                 while (ThereAreNotProcessedEnclosedSamplesNotOfThisClass(enclosedSamples, processedSamples, outputClass))
                 {
-                    key = enclosedSamples.First(x => x.OutputClass != outputClass);
+                    key = enclosedSamples.First(x => x.OutputClass != outputClass && !processedSamples.Contains(x));
 
                     samplesLookupByHammingDistanceFromKey = samplesNotEnclosed.ToLookup(x => GetHammingDistance(key, x));
 
@@ -267,7 +267,8 @@ namespace BinarySynapticWeights
             {
                 foreach (var sample in samplesLookupByHammingDistanceFromKey[i])
                 {
-                    enclosedSamples.Add(sample);
+                    if(!enclosedSamples.Contains(sample))
+                        enclosedSamples.Add(sample);
                 }
             }
         }
