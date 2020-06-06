@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Preprocessing.cs" />
+    <Compile Include="TrainingSets.cs" />
     <Compile Include="UI.cs">
       <SubType>Form</SubType>
     </Compile>

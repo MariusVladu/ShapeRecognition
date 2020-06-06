@@ -7,9 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinarySynapticWeights", "Bi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{09268906-30B0-454C-A71B-FFF0B54B7513}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinarySynapticWeights.Tests", "Tests\BinarySynapticWeights.Tests\BinarySynapticWeights.Tests.csproj", "{69249025-FF68-456D-87A9-4C8FFAC12C15}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinarySynapticWeights.UnitTests", "Tests\BinarySynapticWeights.UnitTests\BinarySynapticWeights.UnitTests.csproj", "{69249025-FF68-456D-87A9-4C8FFAC12C15}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinarySynapticWeightsPointsApplication", "BinarySynapticWeightsPointsApplication\BinarySynapticWeightsPointsApplication.csproj", "{8FCB1BB8-43E0-4F4C-AC90-8989C51C6E77}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinarySynapticWeights.IntegrationTests", "Tests\BinarySynapticWeights.IntegrationTests\BinarySynapticWeights.IntegrationTests.csproj", "{FC8DA956-ADC7-4503-AE2B-6B340C84B973}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,12 +31,17 @@ Global
 		{8FCB1BB8-43E0-4F4C-AC90-8989C51C6E77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FCB1BB8-43E0-4F4C-AC90-8989C51C6E77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8FCB1BB8-43E0-4F4C-AC90-8989C51C6E77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC8DA956-ADC7-4503-AE2B-6B340C84B973}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC8DA956-ADC7-4503-AE2B-6B340C84B973}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC8DA956-ADC7-4503-AE2B-6B340C84B973}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC8DA956-ADC7-4503-AE2B-6B340C84B973}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{69249025-FF68-456D-87A9-4C8FFAC12C15} = {09268906-30B0-454C-A71B-FFF0B54B7513}
+		{FC8DA956-ADC7-4503-AE2B-6B340C84B973} = {09268906-30B0-454C-A71B-FFF0B54B7513}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {14B98DB2-14FC-496B-87BB-B7D2C80895FB}

@@ -41,15 +41,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BinarySynapticWeightsAlgorithm.cs" />
-    <Compile Include="HiddenNode.cs" />
-    <Compile Include="HiddenToOutputSynapticLink.cs" />
-    <Compile Include="InputNode.cs" />
-    <Compile Include="InputToHiddenSynapticLink.cs" />
-    <Compile Include="OutputNode.cs" />
+    <Compile Include="NeuralNetworkTrainingAlgorithm.cs" />
+    <Compile Include="HammingDistance.cs" />
+    <Compile Include="BSWModel.cs" />
+    <Compile Include="Nodes\HiddenNode.cs" />
+    <Compile Include="SynapticLinks\HiddenToOutputSynapticLink.cs" />
+    <Compile Include="Nodes\InputNode.cs" />
+    <Compile Include="SynapticLinks\InputToHiddenSynapticLink.cs" />
+    <Compile Include="Nodes\ThresholdNode.cs" />
+    <Compile Include="Nodes\OutputNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sample.cs" />
     <Compile Include="SerialCoding.cs" />
+    <Compile Include="Vectors.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
