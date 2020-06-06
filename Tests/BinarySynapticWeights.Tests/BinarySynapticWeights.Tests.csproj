@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="BinarySynapticWeightsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerialCodingTests.cs" />
     <Compile Include="TestEntities.cs" />
   </ItemGroup>
   <ItemGroup>

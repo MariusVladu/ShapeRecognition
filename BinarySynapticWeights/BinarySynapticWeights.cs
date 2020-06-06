@@ -36,6 +36,14 @@ namespace BinarySynapticWeights
             return GetActivatedOutputNodeClass();
         }
 
+        private void ApplyVectorOnInputNodes(List<int> inputVector)
+        {
+            for (int i = 0; i < inputNodes.Count; i++)
+            {
+                inputNodes[i].Value = inputVector[i];
+            }
+        }
+
         private void AddWeightsToHiddenNodes()
         {
             foreach (var link in inputToHiddenSynapticLinks)
@@ -70,21 +78,15 @@ namespace BinarySynapticWeights
 
         private string GetActivatedOutputNodeClass()
         {
+            //return !outputNodes[0].IsActivated ? "first" : "second";
             var activatedOutputNode = outputNodes.FirstOrDefault(x => x.IsActivated);
-            if(activatedOutputNode == null)
+            if (activatedOutputNode == null)
             {
+                //return outputNodes.OrderBy(x => Math.Abs(x.Threshold - x.Value)).First().Class;
                 throw new Exception("No output node was activated");
             }
 
             return activatedOutputNode.Class;
-        }
-
-        private void ApplyVectorOnInputNodes(List<int> inputVector)
-        {
-            for (int i = 0; i < inputNodes.Count; i++)
-            {
-                inputNodes[i].Value = inputVector[i];
-            }
         }
 
         public void Train(List<Sample> trainingSamples)

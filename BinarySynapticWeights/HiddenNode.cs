@@ -11,12 +11,10 @@
             if (Value >= Threshold)
             {
                 IsActivated = true;
-                Value = 1;
             }
             else
             {
                 IsActivated = false;
-                Value = 0;
             }
         }
     }
