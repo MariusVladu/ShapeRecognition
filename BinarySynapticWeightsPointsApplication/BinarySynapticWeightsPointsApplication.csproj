@@ -83,6 +83,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BinarySynapticWeights.FeatureExtraction\BinarySynapticWeights.FeatureExtraction.csproj">
+      <Project>{471af05f-d633-4168-8e0f-52f57afdea9d}</Project>
+      <Name>BinarySynapticWeights.FeatureExtraction</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BinarySynapticWeights\BinarySynapticWeights.csproj">
       <Project>{b28487d9-8005-48e2-bfef-1a90e2315299}</Project>
       <Name>BinarySynapticWeights</Name>

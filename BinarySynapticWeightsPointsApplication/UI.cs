@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using BinarySynapticWeights.Contracts;
+using BinarySynapticWeights.FeatureExtraction;
+using BinarySynapticWeights.FeatureExtraction.Contracts;
 
 namespace BinarySynapticWeightsPointsApplication
 {
@@ -10,71 +12,26 @@ namespace BinarySynapticWeightsPointsApplication
     {
         private Graphics graphics;
         private Pen regularPen;
-        private Brush significantPoinBrush;
-        private List<Stroke> strokes = new List<Stroke>();
-        private Stroke currentStroke;
+        private Brush significantPointBrush;
+        private Brush centerPointBrush;
+        private List<IStroke> strokes = new List<IStroke>();
+        private IStroke currentStroke;
         private Point lastDrawnPoint;
-        // start of legacy members
-        private int[,] matrix;
-        private readonly int matrixSize = 64;
-        private readonly int scale = 6;
 
+        private IBSWTrainingAlgorithm bswTrainingAlgorithm;
+        private IBSWNeuralNetwork bswNeuralNetwork;
 
-        private Pen predictedFirstClassPen = new Pen(new SolidBrush(Color.LightGreen));
-        private Pen predictedSecondClassPen = new Pen(new SolidBrush(Color.LightBlue));
-        private Pen firstClassPen = new Pen(new SolidBrush(Color.DarkGreen));
-        private Pen secondClassPen = new Pen(new SolidBrush(Color.DarkBlue));
-
-        private IBSWTrainingAlgorithm binarySynapticWeights;
-        private IBSWNeuralNetwork bSWNeuralNetwork;
-        // end of legacy members
+        private Point centerOfGravityPoint;
+        private static readonly CenterOfGravity CenterOfGravity = new CenterOfGravity();
 
         public UI()
         {
             InitializeComponent();
 
-            matrix = TrainingSets.GetThirdTrainingSet(matrixSize);
             graphics = drawingPictureBox.CreateGraphics();
             regularPen = new Pen(Color.Black, 2);
-            significantPoinBrush = (Brush)Brushes.Green;
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            //DrawTrainingPoints();
-        }
-
-        /*
-        private void DrawTrainingPoints()
-        {
-            var graphics = drawing.CreateGraphics();
-
-            for (int i = 0; i < matrixSize; i++)
-            {
-                for (int j = 0; j < matrixSize; j++)
-                {
-                    if (matrix[i, j] == 1)
-                        DrawPoint(graphics, firstClassPen, i, j);
-
-                    else if(matrix[i, j] == 2)
-                        DrawPoint(graphics, secondClassPen, i, j);
-                }
-            }
-        }
-        */
-
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            /*
-            binarySynapticWeights = new NeuralNetworkTrainingAlgorithm();
-
-            var trainingSamples = Preprocessing.GetTrainingSamplesFromMatrix(matrix);
-
-            bswModel = binarySynapticWeights.Train(trainingSamples);
-
-            ClassifyAllPixels();
-            */
+            significantPointBrush = (Brush)Brushes.Green;
+            centerPointBrush = (Brush)Brushes.Red;
         }
 
         private void drawingPictureBox_MouseDown(object sender, MouseEventArgs e)
@@ -120,11 +77,14 @@ namespace BinarySynapticWeightsPointsApplication
         {
             foreach (Point p in significantPointsOnCurrentStroke)
             {
-                graphics.FillRectangle(significantPoinBrush, p.X - 4, p.Y - 4, 9, 9);
+                graphics.FillRectangle(significantPointBrush, p.X - 4, p.Y - 4, 9, 9);
             }
         }
 
-
+        private void CenterOfGravityButton_Click(object sender, EventArgs e)
+        {
+            centerOfGravityPoint = CenterOfGravity.GetCenterOfGravity(strokes);
+        }
 
 
         /*

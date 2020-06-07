@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using BinarySynapticWeights.FeatureExtraction.Contracts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace BinarySynapticWeights.FeatureExtraction.UnitTests
 {
@@ -52,24 +54,21 @@ namespace BinarySynapticWeights.FeatureExtraction.UnitTests
         }
 
         [TestMethod]
-        public void TestThatGetTotalShapeLengthReturnsExpectedLength()
-        {
-            var shapePoints = new List<Point> { new Point(0, 0), new Point(2, 0), new Point(2, 2), new Point(0, 2) };
-            var expectedTotalLength = 6;
-
-            var result = centerOfGravity.GetTotalShapeLength(shapePoints);
-
-            Assert.AreEqual(expectedTotalLength, result);
-        }
-
-        [TestMethod]
         public void TestThatWhenShapeIsSquareGetCenterOfGravityReturnsSquareCenter()
         {
-            var shapePoints = new List<Point> { new Point(0, 0), new Point(4, 0), new Point(4, 4), new Point(0, 4) };
+            var stroke1 = new Mock<IStroke>();
+            var stroke2 = new Mock<IStroke>();
+            var stroke3 = new Mock<IStroke>();
+            var stroke4 = new Mock<IStroke>();
+            stroke1.Setup(x => x.GetSignificantPoints()).Returns(new List<Point> { new Point(0, 0), new Point(4, 0) });
+            stroke2.Setup(x => x.GetSignificantPoints()).Returns(new List<Point> { new Point(4, 0), new Point(4, 1), new Point(4, 2), new Point(4, 4) });
+            stroke3.Setup(x => x.GetSignificantPoints()).Returns(new List<Point> { new Point(4, 4), new Point(0, 4) });
+            stroke4.Setup(x => x.GetSignificantPoints()).Returns(new List<Point> { new Point(0, 4), new Point(0, 0) });
+            var strokes = new List<IStroke> { stroke1.Object, stroke2.Object, stroke3.Object, stroke4.Object };
             var expectedX = 2;
             var expectedY = 2;
 
-            var result = centerOfGravity.GetCenterOfGravity(shapePoints);
+            var result = centerOfGravity.GetCenterOfGravity(strokes);
 
             Assert.AreEqual(expectedX, result.X);
             Assert.AreEqual(expectedY, result.Y);
