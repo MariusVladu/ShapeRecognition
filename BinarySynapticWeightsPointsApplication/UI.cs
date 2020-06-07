@@ -50,7 +50,12 @@ namespace BinarySynapticWeightsPointsApplication
                 Point currentPoint = e.Location;
                 graphics.DrawLine(regularPen, lastDrawnPoint, currentPoint);
                 lastDrawnPoint = currentPoint;
-                currentStroke.AppendPoint(currentPoint);
+                bool isNewSignificantPoint = currentStroke.AppendPoint(currentPoint);
+                if (isNewSignificantPoint)
+                {
+                    Point lastSignificant = currentStroke.GetLastSignificantPoint();
+                    graphics.FillRectangle(significantPointBrush, lastSignificant.X - 4, lastSignificant.Y - 4, 9, 9);
+                }
             }
         }
 
@@ -62,15 +67,10 @@ namespace BinarySynapticWeightsPointsApplication
             }
         }
 
-        private void SignificantPointsButton_Click(object sender, EventArgs e)
+        private void ResetCanvasButton_Click(object sender, EventArgs e)
         {
-            List<Point> significantPoints = new List<Point>();
-            foreach (Stroke s in strokes)
-            {
-                List<Point> significantPointsOnCurrentStroke = s.GetSignificantPoints();
-                DrawSignificantPoints(significantPointsOnCurrentStroke);
-            }
-
+            drawingPictureBox.Refresh();
+            strokes = new List<IStroke>();
         }
 
         private void DrawSignificantPoints(List<Point> significantPointsOnCurrentStroke)
@@ -84,6 +84,8 @@ namespace BinarySynapticWeightsPointsApplication
         private void CenterOfGravityButton_Click(object sender, EventArgs e)
         {
             centerOfGravityPoint = CenterOfGravity.GetCenterOfGravity(strokes);
+
+            graphics.FillRectangle(centerPointBrush, centerOfGravityPoint.X - 4, centerOfGravityPoint.Y - 4, 9, 9);
         }
 
 

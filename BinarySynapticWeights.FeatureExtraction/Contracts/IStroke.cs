@@ -6,7 +6,8 @@ namespace BinarySynapticWeights.FeatureExtraction.Contracts
     public interface IStroke
     {
         int GetNumberOfPoints();
-        void AppendPoint(Point point);
+        bool AppendPoint(Point point);
         List<Point> GetSignificantPoints();
+        Point GetLastSignificantPoint();
     }
 }
