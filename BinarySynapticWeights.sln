@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinarySynapticWeightsPoints
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinarySynapticWeights.IntegrationTests", "Tests\BinarySynapticWeights.IntegrationTests\BinarySynapticWeights.IntegrationTests.csproj", "{FC8DA956-ADC7-4503-AE2B-6B340C84B973}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinarySynapticWeights.FeatureExtraction", "BinarySynapticWeights.FeatureExtraction\BinarySynapticWeights.FeatureExtraction.csproj", "{471AF05F-D633-4168-8E0F-52F57AFDEA9D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinarySynapticWeights.FeatureExtraction.UnitTests", "Tests\BinarySynapticWeights.FeatureExtraction.UnitTests\BinarySynapticWeights.FeatureExtraction.UnitTests.csproj", "{2501616C-C423-4317-9734-0A784406D940}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +39,14 @@ Global
 		{FC8DA956-ADC7-4503-AE2B-6B340C84B973}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC8DA956-ADC7-4503-AE2B-6B340C84B973}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC8DA956-ADC7-4503-AE2B-6B340C84B973}.Release|Any CPU.Build.0 = Release|Any CPU
+		{471AF05F-D633-4168-8E0F-52F57AFDEA9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{471AF05F-D633-4168-8E0F-52F57AFDEA9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{471AF05F-D633-4168-8E0F-52F57AFDEA9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{471AF05F-D633-4168-8E0F-52F57AFDEA9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2501616C-C423-4317-9734-0A784406D940}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2501616C-C423-4317-9734-0A784406D940}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2501616C-C423-4317-9734-0A784406D940}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2501616C-C423-4317-9734-0A784406D940}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,6 +54,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{69249025-FF68-456D-87A9-4C8FFAC12C15} = {09268906-30B0-454C-A71B-FFF0B54B7513}
 		{FC8DA956-ADC7-4503-AE2B-6B340C84B973} = {09268906-30B0-454C-A71B-FFF0B54B7513}
+		{2501616C-C423-4317-9734-0A784406D940} = {09268906-30B0-454C-A71B-FFF0B54B7513}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {14B98DB2-14FC-496B-87BB-B7D2C80895FB}
