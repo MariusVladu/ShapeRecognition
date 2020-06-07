@@ -39,6 +39,15 @@ namespace BinarySynapticWeightsPointsApplication
                             OutputClass = "second group of pixels"
                         });
                     }
+
+                    else if (matrix[i, j] == 3)
+                    {
+                        samples.Add(new Sample
+                        {
+                            InputVector = GetInputVectorFromCoordinates(i, j),
+                            OutputClass = "third group of pixels"
+                        });
+                    }
                 }
             }
 

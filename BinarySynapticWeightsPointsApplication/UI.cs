@@ -14,8 +14,10 @@ namespace BinarySynapticWeightsPointsApplication
 
         private Pen predictedFirstClassPen = new Pen(new SolidBrush(Color.LightGreen));
         private Pen predictedSecondClassPen = new Pen(new SolidBrush(Color.LightBlue));
+        private Pen predictedThirdClassPen = new Pen(new SolidBrush(Color.Orange));
         private Pen firstClassPen = new Pen(new SolidBrush(Color.DarkGreen));
         private Pen secondClassPen = new Pen(new SolidBrush(Color.DarkBlue));
+        private Pen thirdClassPen = new Pen(new SolidBrush(Color.Red));
 
         private NeuralNetworkTrainingAlgorithm binarySynapticWeights;
         private BSWModel bswModel;
@@ -24,7 +26,7 @@ namespace BinarySynapticWeightsPointsApplication
         {
             InitializeComponent();
 
-            matrix = TrainingSets.GetThirdTrainingSet(matrixSize);
+            matrix = TrainingSets.GetForthTrainingSet(matrixSize);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -45,6 +47,9 @@ namespace BinarySynapticWeightsPointsApplication
 
                     else if(matrix[i, j] == 2)
                         DrawPoint(graphics, secondClassPen, i, j);
+
+                    else if (matrix[i, j] == 3)
+                        DrawPoint(graphics, thirdClassPen, i, j);
                 }
             }
         }
@@ -79,6 +84,9 @@ namespace BinarySynapticWeightsPointsApplication
 
                         else if (predictedClass == "second group of pixels")
                             DrawPoint(graphics, predictedSecondClassPen, i, j);
+
+                        else if (predictedClass == "third group of pixels")
+                            DrawPoint(graphics, predictedThirdClassPen, i, j);
                     }
                     catch (Exception e) { }
                 }

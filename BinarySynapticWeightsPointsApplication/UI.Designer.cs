@@ -70,7 +70,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.drawingPanel);
             this.Name = "UI";
-            this.Text = "Form1";
+            this.Text = "Binary Synaptic Weights";
             this.ResumeLayout(false);
 
         }

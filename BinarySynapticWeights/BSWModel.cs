@@ -15,7 +15,6 @@ namespace BinarySynapticWeights
         public List<InputToHiddenSynapticLink> InputToHiddenSynapticLinks { get; set; }
         public List<HiddenToOutputSynapticLink> HiddenToOutputSynapticLinks { get; set; }
 
-
         public string PredictClass(List<int> inputVector)
         {
             if (OutputNodes.Count == 0)
@@ -36,7 +35,7 @@ namespace BinarySynapticWeights
             AddWeightsToOutputNodes();
             ApplyActivationFunctionOnOutputNodes();
 
-            return GetActivatedOutputNodeClass();
+            return GetTheMostActivatedOutputNodeClass();
         }
 
         private void ResetNodeValues()
@@ -106,6 +105,16 @@ namespace BinarySynapticWeights
             }
 
             return activatedOutputNode.Class;
+        }
+
+        private string GetTheMostActivatedOutputNodeClass()
+        {
+            if (!OutputNodes.Any(x => x.IsActivated))
+            {
+                throw new Exception("No output node was activated");
+            }
+
+            return OutputNodes.Where(x => x.IsActivated).OrderByDescending(x => Math.Abs(x.Value - x.Threshold) / x.Threshold).First().Class;
         }
     }
 }

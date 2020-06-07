@@ -1,6 +1,5 @@
 ﻿using BinarySynapticWeights.Nodes;
 using BinarySynapticWeights.SynapticLinks;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,7 +18,6 @@ namespace BinarySynapticWeights
         private List<Sample> trainingSamplesNotProcessed;
         private List<Sample> enclosedSamplesOfOtherClasses;
         private ILookup<int, Sample> samplesLookupByHammingDistanceFromKey;
-
 
         public BSWModel Train(List<Sample> trainingSamples)
         {
@@ -49,9 +47,7 @@ namespace BinarySynapticWeights
             var inputLayerNodesCount = trainingSamples[0].InputVector.Count;
 
             for (int i = 0; i < inputLayerNodesCount; i++)
-            {
                 model.InputNodes.Add(new InputNode());
-            }
         }
 
         private void BuildModelToRecognizeClass(string outputClass)
@@ -60,11 +56,11 @@ namespace BinarySynapticWeights
             enclosedSamplesOfOtherClasses = new List<Sample>();
 
             var outputNode = new OutputNode { Class = outputClass };
-            var maximumNumberOfPlanesUsedForAPattern = 0;
+            double numberOfPatterns = 0;
 
             while (AreTrainingSamplesOfThisClassNotProcessed(outputClass))
             {
-                var numberOfPlanesUsedForThisPattern = 0;
+                numberOfPatterns++;
                 processedSamples = new List<Sample>();
 
                 var averageVector = Vectors.GetAverageVector(outputClass, trainingSamplesNotProcessed);
@@ -72,9 +68,8 @@ namespace BinarySynapticWeights
                 var yes = Vectors.GetYesSample(key, trainingSamplesNotProcessed);
                 var no = Vectors.GetNoSample(key, trainingSamplesNotProcessed);
 
-                var distance = GetFirstSeparationDistance(key, yes);
+                var distance = GetFirstSeparationDistance(key, yes, no);
                 CreateSeparationPlane(distance, key, outputNode);
-                numberOfPlanesUsedForThisPattern++;
 
                 while (enclosedSamplesOfOtherClasses.Any())
                 {
@@ -83,49 +78,42 @@ namespace BinarySynapticWeights
 
                     distance = GetSeparationDistanceForOtherClasses(outputClass);
                     CreateSeparationPlane(distance, key, outputNode);
-                    numberOfPlanesUsedForThisPattern++;
 
                     enclosedSamplesOfOtherClasses.Remove(key);
-                }
-
-                if (numberOfPlanesUsedForThisPattern > maximumNumberOfPlanesUsedForAPattern)
-                {
-                    maximumNumberOfPlanesUsedForAPattern = numberOfPlanesUsedForThisPattern;
                 }
 
                 UpdateTrainingSamplesNotProcessed();
             }
 
-            outputNode.Threshold = maximumNumberOfPlanesUsedForAPattern - 0.5;
+            outputNode.Threshold = model.HiddenToOutputSynapticLinks.Count(x => x.OutputNode == outputNode) / numberOfPatterns - 0.5;
             model.OutputNodes.Add(outputNode);
         }
 
-        private int GetFirstSeparationDistance(Sample key, Sample yes)
-        {
+        private int GetFirstSeparationDistance(Sample key, Sample yes, Sample no)
+        { 
             samplesLookupByHammingDistanceFromKey = trainingSamplesNotProcessed.ToLookup(x => HammingDistance.GetHammingDistance(key, x));
+
+            int maxSearchDistance = HammingDistance.GetHammingDistance(key, yes);
+
+            int samplesOfThisClassCount;
+            int samplesOfOtherClassesCount;
             var distance = 0;
 
-            while (distance < HammingDistance.GetHammingDistance(key, yes))
+            do
             {
-                var samplesOfThisClassCount = samplesLookupByHammingDistanceFromKey[distance].Count(x => x.OutputClass == key.OutputClass);
-                var samplesOfOtherClassesCount = samplesLookupByHammingDistanceFromKey[distance].Count(x => x.OutputClass != key.OutputClass);
-
-                if (samplesOfThisClassCount < samplesOfOtherClassesCount)
-                {
-                    break;
-                }
-                else
-                {
-                    distance++;
-                }
+                distance++;
+                samplesOfThisClassCount = samplesLookupByHammingDistanceFromKey[distance].Count(x => x.OutputClass == key.OutputClass);
+                samplesOfOtherClassesCount = samplesLookupByHammingDistanceFromKey[distance].Count(x => x.OutputClass != key.OutputClass);
             }
+            while (samplesOfThisClassCount >= samplesOfOtherClassesCount && distance <= maxSearchDistance);
 
             return distance;
         }
 
         private int GetSeparationDistanceForOtherClasses(string outputClass)
         {
-            int samplesOfThisClassCount, samplesOfOtherClassesCount;
+            int samplesOfThisClassCount;
+            int samplesOfOtherClassesCount;
             var distance = 0;
             do
             {
@@ -140,11 +128,9 @@ namespace BinarySynapticWeights
 
         private void CreateSeparationPlane(int distance, Sample key, OutputNode outputNode)
         {
-            distance = Math.Max(distance - 1, 0);
+            CreateSeparationPlaneNodesAndLinks(distance - 1, key, outputNode);
 
-            CreateSeparationPlaneNodesAndLinks(distance, key, outputNode);
-
-            EncloseAndMarkAsProcessedSamplesCloserThanDistance(distance, outputNode.Class);
+            EncloseAndMarkAsProcessedSamplesCloserThanDistance(distance - 1, outputNode.Class);
         }
 
         private void CreateSeparationPlaneNodesAndLinks(int distance, Sample key, OutputNode outputNode)
