@@ -83,6 +83,7 @@ namespace BinarySynapticWeightsPointsApplication
             if (e.Button == MouseButtons.Left)
             {
                 currentStroke = new Stroke(e.Location);
+                lastDrawnPoint = e.Location;
             }
         }
 
