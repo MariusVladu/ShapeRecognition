@@ -32,6 +32,7 @@
             this.SignificantPointsButton = new System.Windows.Forms.Button();
             this.ResetCanvasButton = new System.Windows.Forms.Button();
             this.CenterOfGravityButton = new System.Windows.Forms.Button();
+            this.showRaysButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.drawingPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -77,11 +78,22 @@
             this.CenterOfGravityButton.UseVisualStyleBackColor = true;
             this.CenterOfGravityButton.Click += new System.EventHandler(this.CenterOfGravityButton_Click);
             // 
+            // showRaysButton
+            // 
+            this.showRaysButton.Location = new System.Drawing.Point(400, 98);
+            this.showRaysButton.Name = "showRaysButton";
+            this.showRaysButton.Size = new System.Drawing.Size(95, 25);
+            this.showRaysButton.TabIndex = 6;
+            this.showRaysButton.Text = "Show rays";
+            this.showRaysButton.UseVisualStyleBackColor = true;
+            this.showRaysButton.Click += new System.EventHandler(this.showRaysButton_Click);
+            // 
             // UI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(556, 411);
+            this.Controls.Add(this.showRaysButton);
             this.Controls.Add(this.CenterOfGravityButton);
             this.Controls.Add(this.ResetCanvasButton);
             this.Controls.Add(this.SignificantPointsButton);
@@ -98,6 +110,7 @@
         private System.Windows.Forms.Button SignificantPointsButton;
         private System.Windows.Forms.Button ResetCanvasButton;
         private System.Windows.Forms.Button CenterOfGravityButton;
+        private System.Windows.Forms.Button showRaysButton;
     }
 }
 
