@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BinarySynapticWeights.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace BinarySynapticWeights

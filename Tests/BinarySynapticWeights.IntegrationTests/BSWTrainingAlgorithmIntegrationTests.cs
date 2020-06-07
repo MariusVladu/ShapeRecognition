@@ -1,29 +1,33 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using BinarySynapticWeights.Contracts;
+using BinarySynapticWeights.Entities;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace BinarySynapticWeights.IntegrationTests
 {
     [TestClass]
-    public class NeuralNetworkTrainingAlgorithmIntegrationTests
+    public class BSWTrainingAlgorithmIntegrationTests
     {
-        private NeuralNetworkTrainingAlgorithm algorithm;
+        private IBSWTrainingAlgorithm algorithm;
 
-        private BSWModel trainedModel;
+        private IBSWNeuralNetwork bswNeuralNetwork;
 
         [TestInitialize]
         public void Setup()
         {
-            algorithm = new NeuralNetworkTrainingAlgorithm();
+            algorithm = new BSWTrainingAlgorithm();
 
-            trainedModel = algorithm.Train(TestEntities.GetTrainingSamples());
+            var trainedModel = algorithm.Train(TestEntities.GetTrainingSamples());
+
+            bswNeuralNetwork = new BSWNeuralNetwork(trainedModel);
         }
 
         [Ignore("Wrong example in pdf ?")]
         [TestMethod]
         public void TestThatNetworkCorrectlyRecognisesP1()
         {
-            var result = trainedModel.PredictClass(TestEntities.GetSample1().InputVector);
+            var result = bswNeuralNetwork.PredictClass(TestEntities.GetSample1().InputVector);
 
             Assert.AreEqual("black", result);
         }
@@ -31,7 +35,7 @@ namespace BinarySynapticWeights.IntegrationTests
         [TestMethod]
         public void TestThatNetworkCorrectlyRecognisesP2()
         {
-            var result = trainedModel.PredictClass(TestEntities.GetSample2().InputVector);
+            var result = bswNeuralNetwork.PredictClass(TestEntities.GetSample2().InputVector);
 
             Assert.AreEqual("black", result);
         }
@@ -39,7 +43,7 @@ namespace BinarySynapticWeights.IntegrationTests
         [TestMethod]
         public void TestThatNetworkCorrectlyRecognisesP3()
         {
-            var result = trainedModel.PredictClass(TestEntities.GetSample3().InputVector);
+            var result = bswNeuralNetwork.PredictClass(TestEntities.GetSample3().InputVector);
 
             Assert.AreEqual("white", result);
         }
@@ -47,7 +51,7 @@ namespace BinarySynapticWeights.IntegrationTests
         [TestMethod]
         public void TestThatNetworkCorrectlyRecognisesP4()
         {
-            var result = trainedModel.PredictClass(TestEntities.GetSample4().InputVector);
+            var result = bswNeuralNetwork.PredictClass(TestEntities.GetSample4().InputVector);
 
             Assert.AreEqual("white", result);
         }
@@ -55,7 +59,7 @@ namespace BinarySynapticWeights.IntegrationTests
         [TestMethod]
         public void TestThatNetworkCorrectlyRecognisesP5()
         {
-            var result = trainedModel.PredictClass(TestEntities.GetSample5().InputVector);
+            var result = bswNeuralNetwork.PredictClass(TestEntities.GetSample5().InputVector);
 
             Assert.AreEqual("white", result);
         }
@@ -67,7 +71,7 @@ namespace BinarySynapticWeights.IntegrationTests
             TrainNetworkWith2GroupsOfNumbers(expectedClass, "second group");
             var valueFromGroup1 = SerialCoding.GetSeriallyCodedValue(15, 100);
 
-            var result = trainedModel.PredictClass(valueFromGroup1);
+            var result = bswNeuralNetwork.PredictClass(valueFromGroup1);
 
             Assert.AreEqual(expectedClass, result);
         }
@@ -79,7 +83,7 @@ namespace BinarySynapticWeights.IntegrationTests
             TrainNetworkWith2GroupsOfNumbers("first group", expectedClass);
             var valueFromGroup1 = SerialCoding.GetSeriallyCodedValue(85, 100);
 
-            var result = trainedModel.PredictClass(valueFromGroup1);
+            var result = bswNeuralNetwork.PredictClass(valueFromGroup1);
 
             Assert.AreEqual(expectedClass, result);
         }
@@ -94,7 +98,9 @@ namespace BinarySynapticWeights.IntegrationTests
 
             var allSamples = group1Samples.Concat(group2Samples).ToList();
 
-            trainedModel = algorithm.Train(allSamples);
+            var trainedModel = algorithm.Train(allSamples);
+
+            bswNeuralNetwork = new BSWNeuralNetwork(trainedModel);
         }
     }
 }

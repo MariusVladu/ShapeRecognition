@@ -1,16 +1,19 @@
-﻿using BinarySynapticWeights.Nodes;
+﻿using BinarySynapticWeights.Contracts;
+using BinarySynapticWeights.Entities;
+using BinarySynapticWeights.Nodes;
 using BinarySynapticWeights.SynapticLinks;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace BinarySynapticWeights
 {
-    public class NeuralNetworkTrainingAlgorithm
+    public class BSWTrainingAlgorithm : IBSWTrainingAlgorithm
     {
         private static readonly HammingDistance HammingDistance = new HammingDistance();
         private static readonly Vectors Vectors = new Vectors();
 
-        private BSWModel model;
+        private Model model;
 
         private List<Sample> trainingSamples;
 
@@ -19,7 +22,7 @@ namespace BinarySynapticWeights
         private List<Sample> enclosedSamplesOfOtherClasses;
         private ILookup<int, Sample> samplesLookupByHammingDistanceFromKey;
 
-        public BSWModel Train(List<Sample> trainingSamples)
+        public Model Train(List<Sample> trainingSamples)
         {
             this.trainingSamples = trainingSamples;
             InitializeNodes();
@@ -34,7 +37,7 @@ namespace BinarySynapticWeights
 
         private void InitializeNodes()
         {
-            model = new BSWModel
+            model = new Model
             {
                 InputNodes = new List<InputNode>(),
                 HiddenNodes = new List<HiddenNode>(),
@@ -85,7 +88,7 @@ namespace BinarySynapticWeights
                 UpdateTrainingSamplesNotProcessed();
             }
 
-            outputNode.Threshold = model.HiddenToOutputSynapticLinks.Count(x => x.OutputNode == outputNode) / numberOfPatterns - 0.5;
+            outputNode.Threshold = Math.Round(model.HiddenToOutputSynapticLinks.Count(x => x.OutputNode == outputNode) / numberOfPatterns) - 0.5;
             model.OutputNodes.Add(outputNode);
         }
 

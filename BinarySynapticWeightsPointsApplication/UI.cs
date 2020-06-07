@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using BinarySynapticWeights;
+using BinarySynapticWeights.Contracts;
 
 namespace BinarySynapticWeightsPointsApplication
 {
@@ -19,8 +20,8 @@ namespace BinarySynapticWeightsPointsApplication
         private Pen secondClassPen = new Pen(new SolidBrush(Color.DarkBlue));
         private Pen thirdClassPen = new Pen(new SolidBrush(Color.Red));
 
-        private NeuralNetworkTrainingAlgorithm binarySynapticWeights;
-        private BSWModel bswModel;
+        private IBSWTrainingAlgorithm binarySynapticWeights;
+        private IBSWNeuralNetwork bswNeuralNetwork;
 
         public UI()
         {
@@ -56,11 +57,13 @@ namespace BinarySynapticWeightsPointsApplication
 
         private void button2_Click(object sender, EventArgs e)
         {
-            binarySynapticWeights = new NeuralNetworkTrainingAlgorithm();
+            binarySynapticWeights = new BSWTrainingAlgorithm();
 
             var trainingSamples = Preprocessing.GetTrainingSamplesFromMatrix(matrix);
 
-            bswModel = binarySynapticWeights.Train(trainingSamples);
+            var trainedModel = binarySynapticWeights.Train(trainingSamples);
+
+            bswNeuralNetwork = new BSWNeuralNetwork(trainedModel);
 
             ClassifyAllPixels();
         }
@@ -77,7 +80,7 @@ namespace BinarySynapticWeightsPointsApplication
                     {
 
                         var inputVector = Preprocessing.GetInputVectorFromCoordinates(i, j);
-                        var predictedClass = bswModel.PredictClass(inputVector);
+                        var predictedClass = bswNeuralNetwork.PredictClass(inputVector);
 
                         if (predictedClass == "first group of pixels")
                             DrawPoint(graphics, predictedFirstClassPen, i, j);

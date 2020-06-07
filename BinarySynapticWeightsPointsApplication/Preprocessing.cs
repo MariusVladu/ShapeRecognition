@@ -1,4 +1,5 @@
 ﻿using BinarySynapticWeights;
+using BinarySynapticWeights.Entities;
 using System.Collections.Generic;
 using System.Linq;
 

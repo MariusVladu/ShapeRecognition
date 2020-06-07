@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace BinarySynapticWeights
+namespace BinarySynapticWeights.Entities
 {
     public class Sample
     {
