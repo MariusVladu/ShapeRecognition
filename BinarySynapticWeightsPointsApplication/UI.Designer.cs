@@ -33,6 +33,7 @@
             this.ResetCanvasButton = new System.Windows.Forms.Button();
             this.CenterOfGravityButton = new System.Windows.Forms.Button();
             this.showRaysButton = new System.Windows.Forms.Button();
+            this.ExtractFeaturesButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.drawingPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -88,11 +89,22 @@
             this.showRaysButton.UseVisualStyleBackColor = true;
             this.showRaysButton.Click += new System.EventHandler(this.showRaysButton_Click);
             // 
+            // ExtractFeaturesButton
+            // 
+            this.ExtractFeaturesButton.Location = new System.Drawing.Point(400, 129);
+            this.ExtractFeaturesButton.Name = "ExtractFeaturesButton";
+            this.ExtractFeaturesButton.Size = new System.Drawing.Size(95, 26);
+            this.ExtractFeaturesButton.TabIndex = 7;
+            this.ExtractFeaturesButton.Text = "Extract Features";
+            this.ExtractFeaturesButton.UseVisualStyleBackColor = true;
+            this.ExtractFeaturesButton.Click += new System.EventHandler(this.ExtractFeaturesButton_Click);
+            // 
             // UI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(556, 411);
+            this.Controls.Add(this.ExtractFeaturesButton);
             this.Controls.Add(this.showRaysButton);
             this.Controls.Add(this.CenterOfGravityButton);
             this.Controls.Add(this.ResetCanvasButton);
@@ -111,6 +123,7 @@
         private System.Windows.Forms.Button ResetCanvasButton;
         private System.Windows.Forms.Button CenterOfGravityButton;
         private System.Windows.Forms.Button showRaysButton;
+        private System.Windows.Forms.Button ExtractFeaturesButton;
     }
 }
 

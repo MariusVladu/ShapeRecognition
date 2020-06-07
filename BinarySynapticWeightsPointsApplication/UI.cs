@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using BinarySynapticWeights.Contracts;
 using BinarySynapticWeights.FeatureExtraction;
 using BinarySynapticWeights.FeatureExtraction.Contracts;
+using BinarySynapticWeights.FeatureExtraction.Entities;
 
 namespace BinarySynapticWeightsPointsApplication
 {
@@ -22,8 +23,10 @@ namespace BinarySynapticWeightsPointsApplication
         private IBSWNeuralNetwork bswNeuralNetwork;
 
         private Point centerOfGravityPoint;
+        private List<Point> significantPointAfterRayIntersection;
         private static readonly CenterOfGravity CenterOfGravity = new CenterOfGravity();
         private static readonly RayIntersection RayIntersection = new RayIntersection(16);
+        private static readonly FeatureExtraction FeatureExtraction = new FeatureExtraction();
 
         public UI()
         {
@@ -91,9 +94,9 @@ namespace BinarySynapticWeightsPointsApplication
 
         private void showRaysButton_Click(object sender, EventArgs e)
         {
-            var significantPoints = RayIntersection.GetSignificanPointsAfterRayIntersection(strokes, centerOfGravityPoint);
+            significantPointAfterRayIntersection = RayIntersection.GetSignificanPointsAfterRayIntersection(strokes, centerOfGravityPoint);
 
-            foreach (var point in significantPoints)
+            foreach (var point in significantPointAfterRayIntersection)
             {
                 DrawPoint(point);
             }
@@ -123,6 +126,39 @@ namespace BinarySynapticWeightsPointsApplication
         private void DrawPoint(Point point)
         {
             graphics.FillRectangle(centerPointBrush, (float)point.X - 4, (float)point.Y - 4, 9, 9);
+        }
+
+        private void ExtractFeaturesButton_Click(object sender, EventArgs e)
+        {
+            var segments = FeatureExtraction.GetSegments(significantPointAfterRayIntersection);
+            var shapeFeatures = new ShapeFeatures();
+
+            for (int i = 1; i < segments.Count; i++)
+            {
+                var segment1 = segments[i - 1];
+                var segment2 = segments[i];
+
+
+                graphics.DrawLine(new Pen((Brush)Brushes.LightBlue, 4), segment1.Item1, segment1.Item2);
+                graphics.DrawLine(new Pen((Brush)Brushes.LightGreen, 4), segment2.Item1, segment2.Item2);
+
+                var angleInRadians = FeatureExtraction.GetAngleBetweenSegments(segment1.Item2, segment1.Item1, segment2.Item1, segment2.Item2);
+                var angle = Math.Abs(angleInRadians * 180 / Math.PI);
+                if (angle > 180)
+                    angle = 360 - angle;
+
+                if (angle < 60)
+                    shapeFeatures.AcuteAngles++;
+                else if (angle < 105)
+                    shapeFeatures.RightAngles++;
+                else if (angle < 165)
+                    shapeFeatures.WideAngles++;
+                else if (angle < 195)
+                    shapeFeatures.StraightAngles++;
+                else
+                    shapeFeatures.ReflexAngles++;
+            }
+
         }
 
 

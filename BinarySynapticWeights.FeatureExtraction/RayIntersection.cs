@@ -21,19 +21,24 @@ namespace BinarySynapticWeights.FeatureExtraction
             var segments = GetAllSegmentsFromStrokes(shapeStrokes);
 
             var intervalAngles = (360.0 / divisions);
-            for (int i = 0; i < divisions; i++)
+            foreach (var segment in segments)
             {
-                var radians = (Math.PI / 180) * intervalAngles * i;
-                var rayPoint = new Point((int)(centerOfGravity.X + scale * Math.Cos(radians)), (int)(centerOfGravity.Y + scale * Math.Sin(radians)));
+                Point? intersectionPoint = null;
 
-                foreach (var segment in segments)
+                for (int i = 0; i < divisions; i++)
                 {
-                    var intersectionPoint = GetIntersectionPoint(centerOfGravity, rayPoint, segment.Item1, segment.Item2);
+                    var radians = (Math.PI / 180) * intervalAngles * i;
+                    var rayPoint = new Point((int)(centerOfGravity.X + scale * Math.Cos(radians)), (int)(centerOfGravity.Y + scale * Math.Sin(radians)));
 
-                    if (intersectionPoint != null && IsPointOnSegment(segment.Item1, segment.Item2, intersectionPoint.Value))
-                    {
-                        significantPoints.Add(intersectionPoint.Value);
-                    }
+                    var intersection = GetIntersectionPoint(centerOfGravity, rayPoint, segment.Item1, segment.Item2);
+
+                    if (intersection != null && IsPointOnSegment(segment.Item1, segment.Item2, intersection.Value))
+                        intersectionPoint = intersection;
+                }
+
+                if (intersectionPoint != null)
+                {
+                    significantPoints.Add(intersectionPoint.Value);
                 }
             }
 
