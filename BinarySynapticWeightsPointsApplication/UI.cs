@@ -14,6 +14,7 @@ namespace BinarySynapticWeightsPointsApplication
         private List<Stroke> strokes = new List<Stroke>();
         private Stroke currentStroke;
         private Point lastDrawnPoint;
+
         // start of legacy members
         private int[,] matrix;
         private readonly int matrixSize = 64;
@@ -93,7 +94,12 @@ namespace BinarySynapticWeightsPointsApplication
                 Point currentPoint = e.Location;
                 graphics.DrawLine(regularPen, lastDrawnPoint, currentPoint);
                 lastDrawnPoint = currentPoint;
-                currentStroke.AppendPoint(currentPoint);
+                bool isNewSignificantPoint = currentStroke.AppendPoint(currentPoint);
+                if (isNewSignificantPoint)
+                {
+                    Point lastSignificant = currentStroke.GetLastSignificantPoint();
+                    graphics.FillRectangle(significantPoinBrush, lastSignificant.X - 4, lastSignificant.Y - 4, 9, 9);
+                }
             }
         }
 
@@ -105,24 +111,12 @@ namespace BinarySynapticWeightsPointsApplication
             }
         }
 
-        private void SignificantPointsButton_Click(object sender, EventArgs e)
+        private void ResetCanvasButton_Click(object sender, EventArgs e)
         {
-            List<Point> significantPoints = new List<Point>();
-            foreach (Stroke s in strokes)
-            {
-                List<Point> significantPointsOnCurrentStroke = s.GetSignificantPoints();
-                DrawSignificantPoints(significantPointsOnCurrentStroke);
-            }
-
+            drawingPictureBox.Refresh();
+            strokes = new List<Stroke>();
         }
 
-        private void DrawSignificantPoints(List<Point> significantPointsOnCurrentStroke)
-        {
-            foreach (Point p in significantPointsOnCurrentStroke)
-            {
-                graphics.FillRectangle(significantPoinBrush, p.X - 4, p.Y - 4, 9, 9);
-            }
-        }
 
 
 

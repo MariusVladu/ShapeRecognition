@@ -32,6 +32,7 @@
             this.button2 = new System.Windows.Forms.Button();
             this.drawingPictureBox = new System.Windows.Forms.PictureBox();
             this.SignificantPointsButton = new System.Windows.Forms.Button();
+            this.ResetCanvasButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.drawingPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -76,13 +77,23 @@
             this.SignificantPointsButton.TabIndex = 4;
             this.SignificantPointsButton.Text = "Get Significant Points";
             this.SignificantPointsButton.UseVisualStyleBackColor = true;
-            this.SignificantPointsButton.Click += new System.EventHandler(this.SignificantPointsButton_Click);
+            // 
+            // ResetCanvasButton
+            // 
+            this.ResetCanvasButton.Location = new System.Drawing.Point(402, 162);
+            this.ResetCanvasButton.Name = "ResetCanvasButton";
+            this.ResetCanvasButton.Size = new System.Drawing.Size(88, 39);
+            this.ResetCanvasButton.TabIndex = 5;
+            this.ResetCanvasButton.Text = "Reset Canvas";
+            this.ResetCanvasButton.UseVisualStyleBackColor = true;
+            this.ResetCanvasButton.Click += new System.EventHandler(this.ResetCanvasButton_Click);
             // 
             // UI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(500, 411);
+            this.Controls.Add(this.ResetCanvasButton);
             this.Controls.Add(this.SignificantPointsButton);
             this.Controls.Add(this.drawingPictureBox);
             this.Controls.Add(this.button2);
@@ -99,6 +110,7 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.PictureBox drawingPictureBox;
         private System.Windows.Forms.Button SignificantPointsButton;
+        private System.Windows.Forms.Button ResetCanvasButton;
     }
 }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace BinarySynapticWeightsPointsApplication
 {
@@ -8,14 +9,16 @@ namespace BinarySynapticWeightsPointsApplication
     {
         List<Point> pointsOnStroke;
         List<Point> significantPoints;
-        bool areSignificantPointsComputed;
+        int pointsSinceLastSignificantPoint;
+        int indexOfTheLastSignificantPoint;
         public Stroke(Point startingPoint)
         {
             pointsOnStroke = new List<Point>();
             significantPoints = new List<Point>();
             pointsOnStroke.Add(startingPoint);
             significantPoints.Add(startingPoint);
-            areSignificantPointsComputed = false;
+            pointsSinceLastSignificantPoint = 0;
+            indexOfTheLastSignificantPoint = 0;
         }
 
         public int GetNumberOfPoints()
@@ -23,30 +26,38 @@ namespace BinarySynapticWeightsPointsApplication
             return pointsOnStroke.Count;
         }
 
-        public void AppendPoint(Point point)
+        public Point GetLastSignificantPoint()
         {
+            return significantPoints[significantPoints.Count - 1];
+        }
+
+        public bool AppendPoint(Point point)
+        {
+            Point p1 = pointsOnStroke.Last();
+            double distance = Math.Sqrt((point.X - p1.X) * (point.X - p1.X) + (point.Y - p1.Y) * (point.Y - p1.Y));
+
+            if (distance < 5)
+            {
+                return false;
+            }
             pointsOnStroke.Add(point);
-        }
-
-        public List<Point> GetSignificantPoints()
-        {
-            if (!areSignificantPointsComputed)
+            if (pointsSinceLastSignificantPoint <= 1)
             {
-                ComputeSignificantPoints();
+                pointsSinceLastSignificantPoint++;
+                return false;
             }
-            return significantPoints;
-        }
+            double MrMinusOne = CalculateMs(indexOfTheLastSignificantPoint, pointsOnStroke.Count - 2);
+            double CurrentMr = CalculateMs(indexOfTheLastSignificantPoint, pointsOnStroke.Count - 1);
 
-        private void ComputeSignificantPoints()
-        {
-            if (pointsOnStroke.Count == 2)
+            // if last but least point is significant
+            if (CurrentMr - MrMinusOne < - 50)
             {
-                significantPoints.Add(pointsOnStroke[1]);
-                return;
+                pointsSinceLastSignificantPoint = 1;
+                significantPoints.Add(pointsOnStroke[pointsOnStroke.Count - 2]);
+                indexOfTheLastSignificantPoint = pointsOnStroke.Count - 2;
+                return true;
             }
-
-            double maximum = CalculateMs(1, 3); 
-
+            return false;
         }
 
         private double CalculateMs(int indexOfStartPoint, int indexOfEndPoint)
