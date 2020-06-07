@@ -25,7 +25,7 @@ namespace BinarySynapticWeightsPointsApplication
         private Point centerOfGravityPoint;
         private List<Point> significantPointAfterRayIntersection;
         private static readonly CenterOfGravity CenterOfGravity = new CenterOfGravity();
-        private static readonly RayIntersection RayIntersection = new RayIntersection(16);
+        private static readonly RayIntersection RayIntersection = new RayIntersection(32);
         private static readonly FeatureExtraction FeatureExtraction = new FeatureExtraction();
 
         public UI()

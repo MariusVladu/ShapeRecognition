@@ -42,7 +42,7 @@ namespace BinarySynapticWeights.FeatureExtraction
             Point p1 = pointsOnStroke.Last();
             double distance = Math.Sqrt((point.X - p1.X) * (point.X - p1.X) + (point.Y - p1.Y) * (point.Y - p1.Y));
 
-            if (distance < 20)
+            if (distance < 5)
             {
                 return false;
             }
