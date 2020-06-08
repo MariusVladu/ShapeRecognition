@@ -18,7 +18,7 @@ namespace BinarySynapticWeights.FeatureExtraction
                 var segment1 = segments[i - 1];
                 var segment2 = segments[i];
 
-                var angleInRadians = GetAngleBetweenSegments(segment1.Item1, segment1.Item2, segment2.Item1, segment2.Item2);
+                var angleInRadians = GetAngleBetweenSegments(segment1.Item2, segment1.Item1, segment2.Item1, segment2.Item2);
                 var angle = Math.Abs(angleInRadians * 180 / Math.PI);
                 if (angle > 180)
                     angle = 360 - angle;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using BinarySynapticWeights.Contracts;
 using BinarySynapticWeights.FeatureExtraction;
@@ -15,6 +16,8 @@ namespace BinarySynapticWeightsPointsApplication
         private Pen regularPen;
         private Brush significantPointBrush;
         private Brush centerPointBrush;
+        private Pen rayPen;
+        private Pen preprocessedSegmentsPen;
         private List<IStroke> strokes = new List<IStroke>();
         private IStroke currentStroke;
         private Point lastDrawnPoint;
@@ -23,7 +26,9 @@ namespace BinarySynapticWeightsPointsApplication
         private IBSWNeuralNetwork bswNeuralNetwork;
 
         private Point centerOfGravityPoint;
-        private List<Point> significantPointAfterRayIntersection;
+        private List<Point> significantPointsAfterRayIntersection;
+        private ShapeFeatures currentShapeFeatures;
+
         private static readonly CenterOfGravity CenterOfGravity = new CenterOfGravity();
         private static readonly RayIntersection RayIntersection = new RayIntersection(32);
         private static readonly FeatureExtraction FeatureExtraction = new FeatureExtraction();
@@ -35,7 +40,9 @@ namespace BinarySynapticWeightsPointsApplication
             graphics = drawingPictureBox.CreateGraphics();
             regularPen = new Pen(Color.Black, 2);
             significantPointBrush = (Brush)Brushes.Green;
-            centerPointBrush = (Brush)Brushes.Blue;
+            centerPointBrush = (Brush)Brushes.Red;
+            rayPen = new Pen(Color.Blue, 1);
+            preprocessedSegmentsPen = new Pen(Color.LightBlue, 2);
         }
 
         private void drawingPictureBox_MouseDown(object sender, MouseEventArgs e)
@@ -58,7 +65,7 @@ namespace BinarySynapticWeightsPointsApplication
                 if (isNewSignificantPoint)
                 {
                     Point lastSignificant = currentStroke.GetLastSignificantPoint();
-                    graphics.FillRectangle(significantPointBrush, lastSignificant.X - 4, lastSignificant.Y - 4, 9, 9);
+                    graphics.FillRectangle(significantPointBrush, lastSignificant.X - 2, lastSignificant.Y - 2, 4, 4);
                 }
             }
         }
@@ -75,14 +82,11 @@ namespace BinarySynapticWeightsPointsApplication
         {
             drawingPictureBox.Refresh();
             strokes = new List<IStroke>();
-        }
 
-        private void DrawSignificantPoints(List<Point> significantPointsOnCurrentStroke)
-        {
-            foreach (Point p in significantPointsOnCurrentStroke)
-            {
-                graphics.FillRectangle(significantPointBrush, p.X - 4, p.Y - 4, 9, 9);
-            }
+            acuteAnglesLabel.Text = "# Acute angles = ";
+            rightAnglesLabel.Text = "# Right angles = ";
+            wideAnglesLabel.Text = "# Wide angles = ";
+            straightAnglesLabel.Text = "# Straight angles = ";
         }
 
         private void CenterOfGravityButton_Click(object sender, EventArgs e)
@@ -94,109 +98,41 @@ namespace BinarySynapticWeightsPointsApplication
 
         private void showRaysButton_Click(object sender, EventArgs e)
         {
-            significantPointAfterRayIntersection = RayIntersection.GetSignificanPointsAfterRayIntersection(strokes, centerOfGravityPoint);
+            significantPointsAfterRayIntersection = RayIntersection.GetSignificanPointsAfterRayIntersection(strokes, centerOfGravityPoint);
 
-            foreach (var point in significantPointAfterRayIntersection)
+            foreach (var point in significantPointsAfterRayIntersection)
             {
-                DrawPoint(point);
+                graphics.DrawLine(rayPen, centerOfGravityPoint, point);
+                DrawPoint(point, 9);
             }
 
-            //var scale = 1000;
-            //var divisions = 16;
-            //var segments = RayIntersection.GetAllSegmentsFromStrokes(strokes);
-
-            //var intervalAngles = (360.0 / divisions);
-            //for (int i = 0; i < divisions; i++)
-            //{
-            //    var radians = (Math.PI / 180) * intervalAngles * i;
-            //    var rayPoint = new Point((int)(centerOfGravityPoint.X + scale * Math.Cos(radians)), (int)(centerOfGravityPoint.Y + scale * Math.Sin(radians)));
-
-            //    foreach (var segment in segments)
-            //    {
-            //        var intersectionPoint = RayIntersection.GetIntersectionPoint(centerOfGravityPoint, rayPoint, segment.Item1, segment.Item2);
-
-            //        if (intersectionPoint != null && RayIntersection.IsPointOnSegment(segment.Item1, segment.Item2, intersectionPoint.Value))
-            //        {
-            //            DrawPoint(intersectionPoint.Value);
-            //        }
-            //    }
-            //}
+            DrawSegmentsAfterRaysIntersection();
         }
 
-        private void DrawPoint(Point point)
+        private void DrawSegmentsAfterRaysIntersection()
         {
-            graphics.FillRectangle(centerPointBrush, (float)point.X - 4, (float)point.Y - 4, 9, 9);
+            for (int i = 1; i < significantPointsAfterRayIntersection.Count; i++)
+            {
+                graphics.DrawLine(preprocessedSegmentsPen, significantPointsAfterRayIntersection[i - 1], significantPointsAfterRayIntersection[i]);
+            }
+
+            graphics.DrawLine(preprocessedSegmentsPen, significantPointsAfterRayIntersection.Last(), significantPointsAfterRayIntersection.First());
+        }
+
+        private void DrawPoint(Point point, int size)
+        {
+            graphics.FillRectangle(rayPen.Brush, (float)point.X - size / 2, (float)point.Y - size / 2, size, size);
         }
 
         private void ExtractFeaturesButton_Click(object sender, EventArgs e)
         {
-            var segments = FeatureExtraction.GetSegments(significantPointAfterRayIntersection);
-            var shapeFeatures = new ShapeFeatures();
+            currentShapeFeatures = FeatureExtraction.GetShapeFeatures(significantPointsAfterRayIntersection);
 
-            for (int i = 1; i < segments.Count; i++)
-            {
-                var segment1 = segments[i - 1];
-                var segment2 = segments[i];
-
-
-                graphics.DrawLine(new Pen((Brush)Brushes.LightBlue, 4), segment1.Item1, segment1.Item2);
-                graphics.DrawLine(new Pen((Brush)Brushes.LightGreen, 4), segment2.Item1, segment2.Item2);
-
-                var angleInRadians = FeatureExtraction.GetAngleBetweenSegments(segment1.Item2, segment1.Item1, segment2.Item1, segment2.Item2);
-                var angle = Math.Abs(angleInRadians * 180 / Math.PI);
-                if (angle > 180)
-                    angle = 360 - angle;
-
-                if (angle < 60)
-                    shapeFeatures.AcuteAngles++;
-                else if (angle < 105)
-                    shapeFeatures.RightAngles++;
-                else if (angle < 165)
-                    shapeFeatures.WideAngles++;
-                else if (angle < 195)
-                    shapeFeatures.StraightAngles++;
-                else
-                    shapeFeatures.ReflexAngles++;
-            }
-
+            acuteAnglesLabel.Text += currentShapeFeatures.AcuteAngles;
+            rightAnglesLabel.Text += currentShapeFeatures.RightAngles;
+            wideAnglesLabel.Text += currentShapeFeatures.WideAngles;
+            straightAnglesLabel.Text += currentShapeFeatures.StraightAngles;
         }
 
-
-        /*
-        private void ClassifyAllPixels()
-        {
-            var graphics = drawing.CreateGraphics();
-
-            for (int i = 0; i < 64; i++)
-            {
-                for (int j = 0; j < 64; j++)
-                {
-                    try
-                    {
-
-                        var inputVector = Preprocessing.GetInputVectorFromCoordinates(i, j);
-                        var predictedClass = bswModel.PredictClass(inputVector);
-
-                        if (predictedClass == "first group of pixels")
-                            DrawPoint(graphics, predictedFirstClassPen, i, j);
-
-                        else if (predictedClass == "second group of pixels")
-                            DrawPoint(graphics, predictedSecondClassPen, i, j);
-                    }
-                    catch (Exception e) { }
-                }
-            }
-        }
-        */
-
-        /*
-    private void DrawPoint(Graphics graphics, Pen pen, int x, int y)
-    {
-        graphics.DrawRectangle(pen, x * scale, y * scale, 4, 4);
-        graphics.DrawRectangle(pen, x * scale, y * scale, 3, 3);
-        graphics.DrawRectangle(pen, x * scale, y * scale, 2, 2);
-        graphics.DrawRectangle(pen, x * scale, y * scale, 1, 1);
-    }
-    */
     }
 }
