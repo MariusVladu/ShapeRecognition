@@ -9,13 +9,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{09268906
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinarySynapticWeights.UnitTests", "Tests\BinarySynapticWeights.UnitTests\BinarySynapticWeights.UnitTests.csproj", "{69249025-FF68-456D-87A9-4C8FFAC12C15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinarySynapticWeightsPointsApplication", "BinarySynapticWeightsPointsApplication\BinarySynapticWeightsPointsApplication.csproj", "{8FCB1BB8-43E0-4F4C-AC90-8989C51C6E77}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShapeRecognition.UI", "ShapeRecognition.UI\ShapeRecognition.UI.csproj", "{8FCB1BB8-43E0-4F4C-AC90-8989C51C6E77}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinarySynapticWeights.IntegrationTests", "Tests\BinarySynapticWeights.IntegrationTests\BinarySynapticWeights.IntegrationTests.csproj", "{FC8DA956-ADC7-4503-AE2B-6B340C84B973}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinarySynapticWeights.FeatureExtraction", "BinarySynapticWeights.FeatureExtraction\BinarySynapticWeights.FeatureExtraction.csproj", "{471AF05F-D633-4168-8E0F-52F57AFDEA9D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShapeRecognition.FeatureExtraction", "ShapeRecognition.FeatureExtraction\ShapeRecognition.FeatureExtraction.csproj", "{471AF05F-D633-4168-8E0F-52F57AFDEA9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinarySynapticWeights.FeatureExtraction.UnitTests", "Tests\BinarySynapticWeights.FeatureExtraction.UnitTests\BinarySynapticWeights.FeatureExtraction.UnitTests.csproj", "{2501616C-C423-4317-9734-0A784406D940}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShapeRecognition.FeatureExtraction.UnitTests", "Tests\ShapeRecognition.FeatureExtraction.UnitTests\ShapeRecognition.FeatureExtraction.UnitTests.csproj", "{2501616C-C423-4317-9734-0A784406D940}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
