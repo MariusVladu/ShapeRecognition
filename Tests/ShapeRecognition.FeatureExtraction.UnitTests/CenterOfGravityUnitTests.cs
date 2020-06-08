@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using BinarySynapticWeights.FeatureExtraction.Contracts;
+using ShapeRecognition.FeatureExtraction.Contracts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace BinarySynapticWeights.FeatureExtraction.UnitTests
+namespace ShapeRecognition.FeatureExtraction.UnitTests
 {
     [TestClass]
     public class CenterOfGravityUnitTests

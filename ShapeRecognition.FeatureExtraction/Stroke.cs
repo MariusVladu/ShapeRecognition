@@ -1,10 +1,10 @@
-﻿using BinarySynapticWeights.FeatureExtraction.Contracts;
+﻿using ShapeRecognition.FeatureExtraction.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
-namespace BinarySynapticWeights.FeatureExtraction
+namespace ShapeRecognition.FeatureExtraction
 {
     public class Stroke : IStroke
     {

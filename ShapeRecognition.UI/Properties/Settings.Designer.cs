@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BinarySynapticWeightsPointsApplication.Properties
+namespace ShapeRecognition.Properties
 {
 
 

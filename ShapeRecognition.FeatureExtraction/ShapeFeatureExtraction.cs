@@ -1,12 +1,12 @@
-﻿using BinarySynapticWeights.FeatureExtraction.Entities;
+﻿using ShapeRecognition.FeatureExtraction.Entities;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
-namespace BinarySynapticWeights.FeatureExtraction
+namespace ShapeRecognition.FeatureExtraction
 {
-    public class FeatureExtraction
+    public class ShapeFeatureExtraction
     {
         public ShapeFeatures GetShapeFeatures(List<Point> significantPoints)
         {
@@ -29,10 +29,8 @@ namespace BinarySynapticWeights.FeatureExtraction
                     shapeFeatures.RightAngles++;
                 else if (angle < 165)
                     shapeFeatures.WideAngles++;
-                else if (angle < 195)
-                    shapeFeatures.StraightAngles++;
                 else
-                    shapeFeatures.ReflexAngles++;
+                    shapeFeatures.StraightAngles++;
             }
 
             return shapeFeatures;

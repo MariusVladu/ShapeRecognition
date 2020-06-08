@@ -45,12 +45,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\ShapeFeatures.cs" />
-    <Compile Include="FeatureExtraction.cs" />
     <Compile Include="Contracts\IStroke.cs" />
+    <Compile Include="Entities\ShapeType.cs" />
+    <Compile Include="Preprocessing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CenterOfGravity.cs" />
     <Compile Include="RayIntersection.cs" />
+    <Compile Include="ShapeFeatureExtraction.cs" />
     <Compile Include="Stroke.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BinarySynapticWeights\BinarySynapticWeights.csproj">
+      <Project>{B28487D9-8005-48E2-BFEF-1A90E2315299}</Project>
+      <Name>BinarySynapticWeights</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

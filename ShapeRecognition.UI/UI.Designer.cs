@@ -1,4 +1,4 @@
-﻿namespace BinarySynapticWeightsPointsApplication
+﻿namespace ShapeRecognition
 {
     partial class UI
     {
@@ -38,8 +38,15 @@
             this.wideAnglesLabel = new System.Windows.Forms.Label();
             this.rightAnglesLabel = new System.Windows.Forms.Label();
             this.acuteAnglesLabel = new System.Windows.Forms.Label();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.trainEllipticShapeButton = new System.Windows.Forms.Button();
+            this.trainTriangularShapeButton = new System.Windows.Forms.Button();
+            this.trainRectangularShapeButton = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.recognizedShapeTypeLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.drawingPictureBox)).BeginInit();
             this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // drawingPictureBox
@@ -57,9 +64,9 @@
             // 
             // ResetCanvasButton
             // 
-            this.ResetCanvasButton.Location = new System.Drawing.Point(400, 360);
+            this.ResetCanvasButton.Location = new System.Drawing.Point(402, 360);
             this.ResetCanvasButton.Name = "ResetCanvasButton";
-            this.ResetCanvasButton.Size = new System.Drawing.Size(88, 39);
+            this.ResetCanvasButton.Size = new System.Drawing.Size(141, 39);
             this.ResetCanvasButton.TabIndex = 5;
             this.ResetCanvasButton.Text = "Reset Canvas";
             this.ResetCanvasButton.UseVisualStyleBackColor = true;
@@ -67,9 +74,9 @@
             // 
             // CenterOfGravityButton
             // 
-            this.CenterOfGravityButton.Location = new System.Drawing.Point(400, 12);
+            this.CenterOfGravityButton.Location = new System.Drawing.Point(402, 13);
             this.CenterOfGravityButton.Name = "CenterOfGravityButton";
-            this.CenterOfGravityButton.Size = new System.Drawing.Size(95, 37);
+            this.CenterOfGravityButton.Size = new System.Drawing.Size(141, 25);
             this.CenterOfGravityButton.TabIndex = 5;
             this.CenterOfGravityButton.Text = "Compute Center of Gravity";
             this.CenterOfGravityButton.UseVisualStyleBackColor = true;
@@ -77,9 +84,9 @@
             // 
             // showRaysButton
             // 
-            this.showRaysButton.Location = new System.Drawing.Point(400, 55);
+            this.showRaysButton.Location = new System.Drawing.Point(402, 44);
             this.showRaysButton.Name = "showRaysButton";
-            this.showRaysButton.Size = new System.Drawing.Size(95, 25);
+            this.showRaysButton.Size = new System.Drawing.Size(141, 25);
             this.showRaysButton.TabIndex = 6;
             this.showRaysButton.Text = "Show rays";
             this.showRaysButton.UseVisualStyleBackColor = true;
@@ -87,9 +94,9 @@
             // 
             // ExtractFeaturesButton
             // 
-            this.ExtractFeaturesButton.Location = new System.Drawing.Point(400, 86);
+            this.ExtractFeaturesButton.Location = new System.Drawing.Point(402, 75);
             this.ExtractFeaturesButton.Name = "ExtractFeaturesButton";
-            this.ExtractFeaturesButton.Size = new System.Drawing.Size(95, 26);
+            this.ExtractFeaturesButton.Size = new System.Drawing.Size(141, 25);
             this.ExtractFeaturesButton.TabIndex = 7;
             this.ExtractFeaturesButton.Text = "Extract Features";
             this.ExtractFeaturesButton.UseVisualStyleBackColor = true;
@@ -101,7 +108,7 @@
             this.groupBox1.Controls.Add(this.wideAnglesLabel);
             this.groupBox1.Controls.Add(this.rightAnglesLabel);
             this.groupBox1.Controls.Add(this.acuteAnglesLabel);
-            this.groupBox1.Location = new System.Drawing.Point(400, 132);
+            this.groupBox1.Location = new System.Drawing.Point(402, 106);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(141, 84);
             this.groupBox1.TabIndex = 8;
@@ -148,11 +155,76 @@
             this.acuteAnglesLabel.TabIndex = 0;
             this.acuteAnglesLabel.Text = "# Acute angles = ";
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.trainEllipticShapeButton);
+            this.groupBox2.Controls.Add(this.trainTriangularShapeButton);
+            this.groupBox2.Controls.Add(this.trainRectangularShapeButton);
+            this.groupBox2.Location = new System.Drawing.Point(402, 241);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(139, 113);
+            this.groupBox2.TabIndex = 9;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "This shape is";
+            // 
+            // trainEllipticShapeButton
+            // 
+            this.trainEllipticShapeButton.Location = new System.Drawing.Point(7, 77);
+            this.trainEllipticShapeButton.Name = "trainEllipticShapeButton";
+            this.trainEllipticShapeButton.Size = new System.Drawing.Size(126, 23);
+            this.trainEllipticShapeButton.TabIndex = 2;
+            this.trainEllipticShapeButton.Text = "Elliptic";
+            this.trainEllipticShapeButton.UseVisualStyleBackColor = true;
+            this.trainEllipticShapeButton.Click += new System.EventHandler(this.trainEllipticShapeButton_Click);
+            // 
+            // trainTriangularShapeButton
+            // 
+            this.trainTriangularShapeButton.Location = new System.Drawing.Point(7, 48);
+            this.trainTriangularShapeButton.Name = "trainTriangularShapeButton";
+            this.trainTriangularShapeButton.Size = new System.Drawing.Size(126, 23);
+            this.trainTriangularShapeButton.TabIndex = 1;
+            this.trainTriangularShapeButton.Text = "Triangular";
+            this.trainTriangularShapeButton.UseVisualStyleBackColor = true;
+            this.trainTriangularShapeButton.Click += new System.EventHandler(this.trainTriangularShapeButton_Click);
+            // 
+            // trainRectangularShapeButton
+            // 
+            this.trainRectangularShapeButton.Location = new System.Drawing.Point(6, 19);
+            this.trainRectangularShapeButton.Name = "trainRectangularShapeButton";
+            this.trainRectangularShapeButton.Size = new System.Drawing.Size(127, 23);
+            this.trainRectangularShapeButton.TabIndex = 0;
+            this.trainRectangularShapeButton.Text = "Rectangular";
+            this.trainRectangularShapeButton.UseVisualStyleBackColor = true;
+            this.trainRectangularShapeButton.Click += new System.EventHandler(this.trainRectangularShapeButton_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(397, 193);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(138, 15);
+            this.label1.TabIndex = 10;
+            this.label1.Text = "Recognized shape type:";
+            // 
+            // recognizedShapeTypeLabel
+            // 
+            this.recognizedShapeTypeLabel.AutoSize = true;
+            this.recognizedShapeTypeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.recognizedShapeTypeLabel.Location = new System.Drawing.Point(397, 211);
+            this.recognizedShapeTypeLabel.Name = "recognizedShapeTypeLabel";
+            this.recognizedShapeTypeLabel.Size = new System.Drawing.Size(60, 15);
+            this.recognizedShapeTypeLabel.TabIndex = 11;
+            this.recognizedShapeTypeLabel.Text = "No shape";
+            // 
             // UI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(561, 444);
+            this.ClientSize = new System.Drawing.Size(561, 403);
+            this.Controls.Add(this.recognizedShapeTypeLabel);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.ExtractFeaturesButton);
             this.Controls.Add(this.showRaysButton);
@@ -164,7 +236,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.drawingPictureBox)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -179,6 +253,12 @@
         private System.Windows.Forms.Label straightAnglesLabel;
         private System.Windows.Forms.Label wideAnglesLabel;
         private System.Windows.Forms.Label rightAnglesLabel;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button trainEllipticShapeButton;
+        private System.Windows.Forms.Button trainTriangularShapeButton;
+        private System.Windows.Forms.Button trainRectangularShapeButton;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label recognizedShapeTypeLabel;
     }
 }
 

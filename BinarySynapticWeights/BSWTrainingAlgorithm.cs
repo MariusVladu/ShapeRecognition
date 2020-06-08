@@ -83,6 +83,9 @@ namespace BinarySynapticWeights
                     CreateSeparationPlane(distance, key, outputNode);
 
                     enclosedSamplesOfOtherClasses.Remove(key);
+
+                    if (model.HiddenNodes.Count > 1000)
+                        throw new Exception("infinite loop :( ");
                 }
 
                 UpdateTrainingSamplesNotProcessed();
@@ -124,13 +127,16 @@ namespace BinarySynapticWeights
                 samplesOfThisClassCount = samplesLookupByHammingDistanceFromKey[distance].Count(x => x.OutputClass == outputClass);
                 samplesOfOtherClassesCount = samplesLookupByHammingDistanceFromKey[distance].Count(x => x.OutputClass != outputClass);
             }
-            while (samplesOfThisClassCount <= samplesOfOtherClassesCount);
+            while (samplesOfThisClassCount <= samplesOfOtherClassesCount && distance <= model.InputNodes.Count);
 
             return distance;
         }
 
         private void CreateSeparationPlane(int distance, Sample key, OutputNode outputNode)
         {
+            if (distance > model.InputNodes.Count)
+                return;
+
             CreateSeparationPlaneNodesAndLinks(distance - 1, key, outputNode);
 
             EncloseAndMarkAsProcessedSamplesCloserThanDistance(distance - 1, outputNode.Class);
@@ -169,6 +175,7 @@ namespace BinarySynapticWeights
                     if (sample.OutputClass != outputClass && !enclosedSamplesOfOtherClasses.Contains(sample))
                     {
                         enclosedSamplesOfOtherClasses.Add(sample);
+                        trainingSamplesNotProcessed.Remove(sample);
                     }
 
                     processedSamples.Add(sample);

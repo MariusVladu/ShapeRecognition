@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 
-namespace BinarySynapticWeights.FeatureExtraction.Contracts
+namespace ShapeRecognition.FeatureExtraction.Contracts
 {
     public interface IStroke
     {
