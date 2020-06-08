@@ -37,7 +37,10 @@ namespace ShapeRecognition
         private IBSWTrainingAlgorithm bswTrainingAlgorithm;
         private IBSWNeuralNetwork bswNeuralNetwork;
 
-        private List<Sample> additionalTrainingSamples = new List<Sample>();
+        private static readonly Persistence Persistence = new Persistence();
+
+        private List<Sample> initialTrainingSamples;
+        private List<Sample> additionalTrainingSamples;
 
         public UI()
         {
@@ -50,7 +53,18 @@ namespace ShapeRecognition
             rayPen = new Pen(Color.Blue, 1);
             preprocessedSegmentsPen = new Pen(Color.LightBlue, 2);
 
+            InitializedBSW();
+        }
+
+        private void InitializedBSW()
+        {
+            initialTrainingSamples = Persistence.ReadTrainingSamplesFromFile("SavedTrainingSamples\\initialTrainingSamples.json");
+            additionalTrainingSamples = new List<Sample>();
+
             bswTrainingAlgorithm = new BSWTrainingAlgorithm();
+            var initialModel = bswTrainingAlgorithm.Train(initialTrainingSamples);
+
+            bswNeuralNetwork = new BSWNeuralNetwork(initialModel);
         }
 
         private void drawingPictureBox_MouseDown(object sender, MouseEventArgs e)
@@ -97,15 +111,10 @@ namespace ShapeRecognition
             straightAnglesLabel.Text = "# Straight angles = ";
         }
 
-        private void CenterOfGravityButton_Click(object sender, EventArgs e)
-        {
-            centerOfGravityPoint = CenterOfGravity.GetCenterOfGravity(strokes);
-
-            graphics.FillRectangle(centerPointBrush, centerOfGravityPoint.X - 4, centerOfGravityPoint.Y - 4, 9, 9);
-        }
-
         private void showRaysButton_Click(object sender, EventArgs e)
         {
+            ComputeCenterOfGravity();
+
             significantPointsAfterRayIntersection = RayIntersection.GetSignificanPointsAfterRayIntersection(strokes, centerOfGravityPoint);
 
             foreach (var point in significantPointsAfterRayIntersection)
@@ -115,6 +124,13 @@ namespace ShapeRecognition
             }
 
             DrawSegmentsAfterRaysIntersection();
+        }
+
+        private void ComputeCenterOfGravity()
+        {
+            centerOfGravityPoint = CenterOfGravity.GetCenterOfGravity(strokes);
+
+            graphics.FillRectangle(centerPointBrush, centerOfGravityPoint.X - 4, centerOfGravityPoint.Y - 4, 9, 9);
         }
 
         private void DrawSegmentsAfterRaysIntersection()
@@ -178,12 +194,21 @@ namespace ShapeRecognition
             var trainingSample = Preprocessing.GetTrainingSampleFromShapeFeatures(currentShapeFeatures, shapeType);
             additionalTrainingSamples.Add(trainingSample);
 
+            var allTrainingSamples = initialTrainingSamples.Concat(additionalTrainingSamples).ToList();
+
             try
             {
-                var trainedModel = bswTrainingAlgorithm.Train(additionalTrainingSamples);
+                var trainedModel = bswTrainingAlgorithm.Train(allTrainingSamples);
                 bswNeuralNetwork = new BSWNeuralNetwork(trainedModel);
             }
             catch (Exception e) { }
+        }
+
+        private void saveModelButton_Click(object sender, EventArgs e)
+        {
+            var allTrainingSamples = initialTrainingSamples.Concat(additionalTrainingSamples).ToList();
+
+            Persistence.SaveTrainingSamplesToFile(allTrainingSamples);
         }
     }
 }

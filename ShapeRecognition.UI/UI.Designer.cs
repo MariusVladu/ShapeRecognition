@@ -30,7 +30,6 @@
         {
             this.drawingPictureBox = new System.Windows.Forms.PictureBox();
             this.ResetCanvasButton = new System.Windows.Forms.Button();
-            this.CenterOfGravityButton = new System.Windows.Forms.Button();
             this.showRaysButton = new System.Windows.Forms.Button();
             this.ExtractFeaturesButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -44,6 +43,7 @@
             this.trainRectangularShapeButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.recognizedShapeTypeLabel = new System.Windows.Forms.Label();
+            this.saveModelButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.drawingPictureBox)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -72,19 +72,9 @@
             this.ResetCanvasButton.UseVisualStyleBackColor = true;
             this.ResetCanvasButton.Click += new System.EventHandler(this.ResetCanvasButton_Click);
             // 
-            // CenterOfGravityButton
-            // 
-            this.CenterOfGravityButton.Location = new System.Drawing.Point(402, 13);
-            this.CenterOfGravityButton.Name = "CenterOfGravityButton";
-            this.CenterOfGravityButton.Size = new System.Drawing.Size(141, 25);
-            this.CenterOfGravityButton.TabIndex = 5;
-            this.CenterOfGravityButton.Text = "Compute Center of Gravity";
-            this.CenterOfGravityButton.UseVisualStyleBackColor = true;
-            this.CenterOfGravityButton.Click += new System.EventHandler(this.CenterOfGravityButton_Click);
-            // 
             // showRaysButton
             // 
-            this.showRaysButton.Location = new System.Drawing.Point(402, 44);
+            this.showRaysButton.Location = new System.Drawing.Point(402, 12);
             this.showRaysButton.Name = "showRaysButton";
             this.showRaysButton.Size = new System.Drawing.Size(141, 25);
             this.showRaysButton.TabIndex = 6;
@@ -94,7 +84,7 @@
             // 
             // ExtractFeaturesButton
             // 
-            this.ExtractFeaturesButton.Location = new System.Drawing.Point(402, 75);
+            this.ExtractFeaturesButton.Location = new System.Drawing.Point(402, 43);
             this.ExtractFeaturesButton.Name = "ExtractFeaturesButton";
             this.ExtractFeaturesButton.Size = new System.Drawing.Size(141, 25);
             this.ExtractFeaturesButton.TabIndex = 7;
@@ -108,7 +98,7 @@
             this.groupBox1.Controls.Add(this.wideAnglesLabel);
             this.groupBox1.Controls.Add(this.rightAnglesLabel);
             this.groupBox1.Controls.Add(this.acuteAnglesLabel);
-            this.groupBox1.Location = new System.Drawing.Point(402, 106);
+            this.groupBox1.Location = new System.Drawing.Point(402, 80);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(141, 84);
             this.groupBox1.TabIndex = 8;
@@ -160,7 +150,7 @@
             this.groupBox2.Controls.Add(this.trainEllipticShapeButton);
             this.groupBox2.Controls.Add(this.trainTriangularShapeButton);
             this.groupBox2.Controls.Add(this.trainRectangularShapeButton);
-            this.groupBox2.Location = new System.Drawing.Point(402, 241);
+            this.groupBox2.Location = new System.Drawing.Point(402, 211);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(139, 113);
             this.groupBox2.TabIndex = 9;
@@ -201,7 +191,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(397, 193);
+            this.label1.Location = new System.Drawing.Point(402, 167);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(138, 15);
             this.label1.TabIndex = 10;
@@ -211,24 +201,34 @@
             // 
             this.recognizedShapeTypeLabel.AutoSize = true;
             this.recognizedShapeTypeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.recognizedShapeTypeLabel.Location = new System.Drawing.Point(397, 211);
+            this.recognizedShapeTypeLabel.Location = new System.Drawing.Point(402, 184);
             this.recognizedShapeTypeLabel.Name = "recognizedShapeTypeLabel";
             this.recognizedShapeTypeLabel.Size = new System.Drawing.Size(60, 15);
             this.recognizedShapeTypeLabel.TabIndex = 11;
             this.recognizedShapeTypeLabel.Text = "No shape";
             // 
+            // saveModelButton
+            // 
+            this.saveModelButton.Location = new System.Drawing.Point(12, 405);
+            this.saveModelButton.Name = "saveModelButton";
+            this.saveModelButton.Size = new System.Drawing.Size(82, 23);
+            this.saveModelButton.TabIndex = 12;
+            this.saveModelButton.Text = "Save Model";
+            this.saveModelButton.UseVisualStyleBackColor = true;
+            this.saveModelButton.Click += new System.EventHandler(this.saveModelButton_Click);
+            // 
             // UI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(561, 403);
+            this.ClientSize = new System.Drawing.Size(561, 432);
+            this.Controls.Add(this.saveModelButton);
             this.Controls.Add(this.recognizedShapeTypeLabel);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.ExtractFeaturesButton);
             this.Controls.Add(this.showRaysButton);
-            this.Controls.Add(this.CenterOfGravityButton);
             this.Controls.Add(this.ResetCanvasButton);
             this.Controls.Add(this.drawingPictureBox);
             this.Name = "UI";
@@ -245,7 +245,6 @@
         #endregion
         private System.Windows.Forms.PictureBox drawingPictureBox;
         private System.Windows.Forms.Button ResetCanvasButton;
-        private System.Windows.Forms.Button CenterOfGravityButton;
         private System.Windows.Forms.Button showRaysButton;
         private System.Windows.Forms.Button ExtractFeaturesButton;
         private System.Windows.Forms.GroupBox groupBox1;
@@ -259,6 +258,7 @@
         private System.Windows.Forms.Button trainRectangularShapeButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label recognizedShapeTypeLabel;
+        private System.Windows.Forms.Button saveModelButton;
     }
 }
 
