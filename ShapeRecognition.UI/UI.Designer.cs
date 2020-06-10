@@ -76,7 +76,7 @@
             // 
             // ExtractFeaturesButton
             // 
-            this.ExtractFeaturesButton.Location = new System.Drawing.Point(402, 43);
+            this.ExtractFeaturesButton.Location = new System.Drawing.Point(402, 12);
             this.ExtractFeaturesButton.Name = "ExtractFeaturesButton";
             this.ExtractFeaturesButton.Size = new System.Drawing.Size(141, 25);
             this.ExtractFeaturesButton.TabIndex = 7;
@@ -90,7 +90,7 @@
             this.groupBox1.Controls.Add(this.wideAnglesLabel);
             this.groupBox1.Controls.Add(this.rightAnglesLabel);
             this.groupBox1.Controls.Add(this.acuteAnglesLabel);
-            this.groupBox1.Location = new System.Drawing.Point(402, 80);
+            this.groupBox1.Location = new System.Drawing.Point(402, 49);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(141, 84);
             this.groupBox1.TabIndex = 8;
@@ -147,7 +147,7 @@
             this.groupBox2.Size = new System.Drawing.Size(139, 113);
             this.groupBox2.TabIndex = 9;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "This shape is";
+            this.groupBox2.Text = "Train BSW";
             // 
             // trainEllipticShapeButton
             // 
@@ -183,7 +183,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(402, 167);
+            this.label1.Location = new System.Drawing.Point(402, 136);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(138, 15);
             this.label1.TabIndex = 10;
@@ -193,7 +193,7 @@
             // 
             this.recognizedShapeTypeLabel.AutoSize = true;
             this.recognizedShapeTypeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.recognizedShapeTypeLabel.Location = new System.Drawing.Point(402, 184);
+            this.recognizedShapeTypeLabel.Location = new System.Drawing.Point(402, 153);
             this.recognizedShapeTypeLabel.Name = "recognizedShapeTypeLabel";
             this.recognizedShapeTypeLabel.Size = new System.Drawing.Size(60, 15);
             this.recognizedShapeTypeLabel.TabIndex = 11;
@@ -240,7 +240,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(561, 432);
+            this.ClientSize = new System.Drawing.Size(561, 440);
             this.Controls.Add(this.loadModelButton);
             this.Controls.Add(this.hiddenLayerNodesLabel);
             this.Controls.Add(this.label2);

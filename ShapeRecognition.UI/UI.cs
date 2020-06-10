@@ -58,13 +58,23 @@ namespace ShapeRecognition
 
         private void InitializedBSW()
         {
-            initialTrainingSamples = Persistence.ReadTrainingSamplesFromFile("SavedTrainingSamples\\initialTrainingSamples.json");
+            try
+            {
+                initialTrainingSamples = Persistence.ReadTrainingSamplesFromFile("SavedTrainingSamples\\initialTrainingSamples.json");
+
+                bswTrainingAlgorithm = new BSWTrainingAlgorithm();
+                var initialModel = bswTrainingAlgorithm.Train(initialTrainingSamples);
+
+                bswNeuralNetwork = new BSWNeuralNetwork(initialModel);
+
+                ShowBSWHiddenLayerNodes();
+            }
+            catch(Exception)
+            {
+                initialTrainingSamples = new List<Sample>();
+            }
+
             additionalTrainingSamples = new List<Sample>();
-
-            bswTrainingAlgorithm = new BSWTrainingAlgorithm();
-            var initialModel = bswTrainingAlgorithm.Train(initialTrainingSamples);
-
-            bswNeuralNetwork = new BSWNeuralNetwork(initialModel);
         }
 
         private void drawingPictureBox_MouseDown(object sender, MouseEventArgs e)
@@ -141,6 +151,8 @@ namespace ShapeRecognition
 
         private void ExtractFeaturesButton_Click(object sender, EventArgs e)
         {
+            if (!strokes.Any()) return;
+
             ComputeCenterOfGravity();
 
             significantPointsAfterRayIntersection = RayIntersection.GetSignificanPointsAfterRayIntersection(strokes, centerOfGravityPoint);
@@ -194,6 +206,8 @@ namespace ShapeRecognition
 
         private void TrainCurrentShape(ShapeType shapeType)
         {
+            if (!strokes.Any()) return;
+
             var trainingSample = Preprocessing.GetTrainingSampleFromShapeFeatures(currentShapeFeatures, shapeType);
             additionalTrainingSamples.Add(trainingSample);
 
@@ -201,17 +215,20 @@ namespace ShapeRecognition
 
             try
             {
+                bswTrainingAlgorithm = new BSWTrainingAlgorithm();
                 var trainedModel = bswTrainingAlgorithm.Train(allTrainingSamples);
                 bswNeuralNetwork = new BSWNeuralNetwork(trainedModel);
             }
             catch (Exception e) { }
 
-            hiddenLayerNodesLabel.Text = "" + bswNeuralNetwork.Model.HiddenNodes.Count;
+            ShowBSWHiddenLayerNodes();
         }
 
         private void saveModelButton_Click(object sender, EventArgs e)
         {
             SaveFileDialog fileDialog = new SaveFileDialog();
+            fileDialog.FileName = Persistence.GetDefaultSaveFileName();
+            fileDialog.Filter = "Json|*.json";
             if (fileDialog.ShowDialog() != DialogResult.OK)
                 return;
 
@@ -234,6 +251,11 @@ namespace ShapeRecognition
             var initialModel = bswTrainingAlgorithm.Train(initialTrainingSamples);
 
             bswNeuralNetwork = new BSWNeuralNetwork(initialModel);
+        }
+
+        private void ShowBSWHiddenLayerNodes()
+        {
+            hiddenLayerNodesLabel.Text = "" + bswNeuralNetwork.Model.HiddenNodes.Count;
         }
     }
 }

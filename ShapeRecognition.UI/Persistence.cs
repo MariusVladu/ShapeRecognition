@@ -15,13 +15,9 @@ namespace ShapeRecognition
             File.WriteAllText(filePath, serializedSamples);
         }
 
-        public void SaveTrainingSamplesToFile(List<Sample> trainingSamples)
+        public string GetDefaultSaveFileName()
         {
-            var serializedSamples = JsonConvert.SerializeObject(trainingSamples);
-
-            var outputFileName = $"SavedTrainingSamples\\TrainingSamples.{DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss")}.json";
-
-            File.WriteAllText(outputFileName, serializedSamples);
+            return $"TrainingSamples.{DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss")}.json";
         }
 
         public List<Sample> ReadTrainingSamplesFromFile(string filePath)
