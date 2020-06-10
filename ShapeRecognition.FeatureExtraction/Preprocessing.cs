@@ -29,7 +29,7 @@ namespace ShapeRecognition.FeatureExtraction
             var acuteSerialCode = SerialCoding.GetSeriallyCodedValue(shapeFeatures.AcuteAngles, serialCodeLength);
             var rightSerialCode = SerialCoding.GetSeriallyCodedValue(shapeFeatures.RightAngles, serialCodeLength);
             var wideSerialCode = SerialCoding.GetSeriallyCodedValue(shapeFeatures.WideAngles, serialCodeLength);
-            var straightSerialCode = SerialCoding.GetSeriallyCodedValue(shapeFeatures.AcuteAngles, serialCodeLength);
+            var straightSerialCode = SerialCoding.GetSeriallyCodedValue(shapeFeatures.StraightAngles, serialCodeLength);
 
             return acuteSerialCode.Concat(rightSerialCode).Concat(wideSerialCode).Concat(straightSerialCode).ToList();
         }
