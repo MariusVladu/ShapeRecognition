@@ -117,21 +117,6 @@ namespace ShapeRecognition
             straightAnglesLabel.Text = "# Straight angles = ";
         }
 
-        private void showRaysButton_Click(object sender, EventArgs e)
-        {
-            ComputeCenterOfGravity();
-
-            significantPointsAfterRayIntersection = RayIntersection.GetSignificanPointsAfterRayIntersection(strokes, centerOfGravityPoint);
-
-            foreach (var point in significantPointsAfterRayIntersection)
-            {
-                graphics.DrawLine(rayPen, centerOfGravityPoint, point);
-                DrawPoint(point, 9);
-            }
-
-            DrawSegmentsAfterRaysIntersection();
-        }
-
         private void ComputeCenterOfGravity()
         {
             centerOfGravityPoint = CenterOfGravity.GetCenterOfGravity(strokes);
@@ -156,6 +141,18 @@ namespace ShapeRecognition
 
         private void ExtractFeaturesButton_Click(object sender, EventArgs e)
         {
+            ComputeCenterOfGravity();
+
+            significantPointsAfterRayIntersection = RayIntersection.GetSignificanPointsAfterRayIntersection(strokes, centerOfGravityPoint);
+
+            foreach (var point in significantPointsAfterRayIntersection)
+            {
+                graphics.DrawLine(rayPen, centerOfGravityPoint, point);
+                DrawPoint(point, 9);
+            }
+
+            DrawSegmentsAfterRaysIntersection();
+
             currentShapeFeatures = FeatureExtraction.GetShapeFeatures(significantPointsAfterRayIntersection);
 
             acuteAnglesLabel.Text += currentShapeFeatures.AcuteAngles;
@@ -214,9 +211,29 @@ namespace ShapeRecognition
 
         private void saveModelButton_Click(object sender, EventArgs e)
         {
+            SaveFileDialog fileDialog = new SaveFileDialog();
+            if (fileDialog.ShowDialog() != DialogResult.OK)
+                return;
+
             var allTrainingSamples = initialTrainingSamples.Concat(additionalTrainingSamples).ToList();
 
-            Persistence.SaveTrainingSamplesToFile(allTrainingSamples);
+            Persistence.SaveTrainingSamplesToFile(allTrainingSamples, fileDialog.FileName);
+        }
+
+        private void loadModelButton_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Filter = "Json|*.json";
+            if (fileDialog.ShowDialog() != DialogResult.OK)
+                return;
+
+            initialTrainingSamples = Persistence.ReadTrainingSamplesFromFile(fileDialog.FileName);
+            additionalTrainingSamples = new List<Sample>();
+
+            bswTrainingAlgorithm = new BSWTrainingAlgorithm();
+            var initialModel = bswTrainingAlgorithm.Train(initialTrainingSamples);
+
+            bswNeuralNetwork = new BSWNeuralNetwork(initialModel);
         }
     }
 }

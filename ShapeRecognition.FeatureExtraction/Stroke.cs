@@ -64,8 +64,6 @@ namespace ShapeRecognition.FeatureExtraction
             double MrMinusOne = CalculateMs(indexOfTheLastSignificantPoint, pointsOnStroke.Count - 2);
             double CurrentMr = CalculateMs(indexOfTheLastSignificantPoint, pointsOnStroke.Count - 1);
 
-            Debug.WriteLine($"{(int)CurrentMr} : {(int)MrMinusOne}");
-            // if last but least point is significant
             if (CurrentMr < MrMinusOne)
             {
                 pointsSinceLastSignificantPoint = 1;

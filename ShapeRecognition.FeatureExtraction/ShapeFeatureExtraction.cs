@@ -23,7 +23,7 @@ namespace ShapeRecognition.FeatureExtraction
                 if (angle > 180)
                     angle = 360 - angle;
 
-                if (angle < 60)
+                if (angle < 75)
                     shapeFeatures.AcuteAngles++;
                 else if (angle < 105)
                     shapeFeatures.RightAngles++;

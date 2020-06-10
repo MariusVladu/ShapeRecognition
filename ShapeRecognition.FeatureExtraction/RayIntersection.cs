@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace ShapeRecognition.FeatureExtraction
 {
@@ -9,50 +10,123 @@ namespace ShapeRecognition.FeatureExtraction
     {
         private int divisions;
         private int scale = 1000;
+        private double IntervalAngles => 360.0 / divisions;
 
         public RayIntersection(int divisions)
         {
             this.divisions = divisions;
         }
 
-        public List<Point> GetSignificanPointsAfterRayIntersection(List<IStroke> shapeStrokes, Point centerOfGravitY)
+        public List<Point> GetSignificanPointsAfterRayIntersection(List<IStroke> shapeStrokes, Point centerOfGravity)
         {
-            var significantPoints = new List<Point>();
+            var intersections = new List<Point>();
             var segments = GetAllSegmentsFromStrokes(shapeStrokes);
 
-            var intervalAngles = (360.0 / divisions);
             foreach (var segment in segments)
             {
                 for (int i = 0; i < divisions / 2; i++)
                 {
-                    var radians = (Math.PI / 180) * intervalAngles * i;
-                    var raYPoint = new Point((int)(centerOfGravitY.X + scale * Math.Cos(radians)), (int)(centerOfGravitY.Y + scale * Math.Sin(radians)));
+                    var radians = (Math.PI / 180) * IntervalAngles * i;
+                    var raYPoint = new Point((int)(centerOfGravity.X + scale * Math.Cos(radians)), (int)(centerOfGravity.Y + scale * Math.Sin(radians)));
 
-                    var intersection = GetIntersectionPoint(centerOfGravitY, raYPoint, segment.Item1, segment.Item2);
+                    var intersection = GetIntersectionPoint(centerOfGravity, raYPoint, segment.Item1, segment.Item2);
 
                     if (intersection != null && IsPointOnSegment(segment.Item1, segment.Item2, intersection.Value))
                     {
-                        significantPoints.Add(intersection.Value);
+                        intersections.Add(intersection.Value);
                     }
                 }
             }
+            var intersectionsWithoutExtensions = GetIntersectionsWithoutExtensions(intersections, centerOfGravity);
 
-            for (int i = 0; i < significantPoints.Count; i++)
+            var intersectionsMovedToClosestSignificanPoints = GetIntersectionsToClosestSignificantPoints(intersectionsWithoutExtensions, shapeStrokes);
+
+            return GetOrderedPoints(intersectionsMovedToClosestSignificanPoints, centerOfGravity);
+        }
+
+        public List<Point> GetIntersectionsToClosestSignificantPoints(List<Point> raysIntersectionPoints, List<IStroke> strokes)
+        {
+            var significantPoints = GetAllSignificantPoints(strokes);
+
+            var mergedPoints = raysIntersectionPoints.ToArray();
+
+            foreach (var significantPoint in significantPoints)
             {
-                for (int j = 0; j < significantPoints.Count; j++)
-                {
-                    var a = significantPoints[i];
-                    var b = significantPoints[j];
+                int closestRayIntersectionPointIndex = 0;
+                var minimumLength = double.MaxValue;
 
-                    if(Less(a, b, centerOfGravitY))
+                for (int i = 0; i < raysIntersectionPoints.Count; i++)
+                {
+                    var length = GetSegmentLength(significantPoint, mergedPoints[i]);
+                    if (length < minimumLength)
                     {
-                        significantPoints[i] = b;
-                        significantPoints[j] = a;
+                        minimumLength = length;
+                        closestRayIntersectionPointIndex = i; ;
+                    }
+                }
+
+                mergedPoints[closestRayIntersectionPointIndex].X = significantPoint.X;
+                mergedPoints[closestRayIntersectionPointIndex].Y = significantPoint.Y;
+            }
+
+            return new List<Point>(mergedPoints);
+        }
+
+        private List<Point> GetIntersectionsWithoutExtensions(List<Point> intersections, Point centerOfGravity)
+        {
+            var intersectionsWithoutExtensions = new List<Point>();
+
+            for (int i = 0; i < divisions; i++)
+            {
+                var radians = (Math.PI / 180) * IntervalAngles * i;
+                var raYPoint = new Point((int)(centerOfGravity.X + scale * Math.Cos(radians)), (int)(centerOfGravity.Y + scale * Math.Sin(radians)));
+
+                var segmentsIntersectedByRay = new List<Point>();
+
+                foreach (var intersectionPoint in intersections)
+                {
+                    if (IsPointOnSegment(centerOfGravity, raYPoint, intersectionPoint))
+                    {
+                        segmentsIntersectedByRay.Add(intersectionPoint);
+                    }
+                }
+
+                if (segmentsIntersectedByRay.Any())
+                {
+                    var closestIntersectionPoint = segmentsIntersectedByRay.OrderBy(x => GetSegmentLength(x, centerOfGravity)).First();
+
+                    intersectionsWithoutExtensions.Add(closestIntersectionPoint);
+                }
+            }
+
+            return intersectionsWithoutExtensions;
+        }
+
+        public double GetSegmentLength(Point p1, Point p2)
+        {
+            return Math.Sqrt((p2.X - p1.X) * (p2.X - p1.X) + (p2.Y - p1.Y) * (p2.Y - p1.Y));
+        }
+
+        private List<Point> GetOrderedPoints(List<Point> points, Point centerOfGravity)
+        {
+            var orderedPoints = points.ToArray();
+
+            for (int i = 0; i < orderedPoints.Length; i++)
+            {
+                for (int j = 0; j < orderedPoints.Length; j++)
+                {
+                    var a = orderedPoints[i];
+                    var b = orderedPoints[j];
+
+                    if (Less(a, b, centerOfGravity))
+                    {
+                        orderedPoints[i] = b;
+                        orderedPoints[j] = a;
                     }
                 }
             }
 
-            return significantPoints;
+            return new List<Point>(orderedPoints);
         }
 
         bool Less(Point a, Point b, Point center)
@@ -84,30 +158,51 @@ namespace ShapeRecognition.FeatureExtraction
 
         public List<Tuple<Point, Point>> GetAllSegmentsFromStrokes(List<IStroke> shapeStrokes)
         {
+            var allPoints = GetAllSignificantPoints(shapeStrokes);
+
+            return GetSegments(allPoints);
+        }
+
+        public List<Point> GetAllSignificantPoints(List<IStroke> strokes)
+        {
+            var points = new List<Point>();
+
+            foreach (var stroke in strokes)
+            {
+                var strokePoints = stroke.GetSignificantPoints();
+
+                //if (points.Count > 1 && strokePoints.Count > 1)
+                //{
+                //    var intersection = GetIntersectionPoint(points[points.Count - 2], points[points.Count - 1], strokePoints[strokePoints.Count - 2], strokePoints[strokePoints.Count - 1]);
+
+                //    if (intersection != null && IsPointOnSegment(points[points.Count - 2], points[points.Count - 1], intersection.Value))
+                //    {
+                //        points.Remove(points[points.Count - 1]);
+                //        strokePoints.RemoveAt(0);
+
+                //        points.Add(intersection.Value);
+                //    }
+                //}
+
+                points.AddRange(strokePoints);
+            }
+
+            return points;
+        }
+
+        public List<Tuple<Point, Point>> GetSegments(List<Point> points)
+        {
             var segments = new List<Tuple<Point, Point>>();
 
-            foreach (var stroke in shapeStrokes)
+            for (int i = 1; i < points.Count; i++)
             {
-                segments.AddRange(GetStrokeSegments(stroke));
+                var p1 = points[i - 1];
+                var p2 = points[i];
+
+                segments.Add(new Tuple<Point, Point>(p1, p2));
             }
 
             return segments;
-        }
-
-        public List<Tuple<Point, Point>> GetStrokeSegments(IStroke stroke)
-        {
-            var significantPoints = stroke.GetSignificantPoints();
-            var strokeSegments = new List<Tuple<Point, Point>>();
-
-            for (int i = 1; i < significantPoints.Count; i++)
-            {
-                var p1 = significantPoints[i - 1];
-                var p2 = significantPoints[i];
-
-                strokeSegments.Add(new Tuple<Point, Point>(p1, p2));
-            }
-
-            return strokeSegments;
         }
 
         public Point? GetIntersectionPoint(Point a1, Point a2, Point b1, Point b2)

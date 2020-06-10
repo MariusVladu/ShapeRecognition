@@ -8,6 +8,13 @@ namespace ShapeRecognition
 {
     public class Persistence
     {
+        public void SaveTrainingSamplesToFile(List<Sample> trainingSamples, string filePath)
+        {
+            var serializedSamples = JsonConvert.SerializeObject(trainingSamples);
+
+            File.WriteAllText(filePath, serializedSamples);
+        }
+
         public void SaveTrainingSamplesToFile(List<Sample> trainingSamples)
         {
             var serializedSamples = JsonConvert.SerializeObject(trainingSamples);

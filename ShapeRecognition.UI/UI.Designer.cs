@@ -30,7 +30,6 @@
         {
             this.drawingPictureBox = new System.Windows.Forms.PictureBox();
             this.ResetCanvasButton = new System.Windows.Forms.Button();
-            this.showRaysButton = new System.Windows.Forms.Button();
             this.ExtractFeaturesButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.straightAnglesLabel = new System.Windows.Forms.Label();
@@ -46,6 +45,7 @@
             this.saveModelButton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.hiddenLayerNodesLabel = new System.Windows.Forms.Label();
+            this.loadModelButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.drawingPictureBox)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -73,16 +73,6 @@
             this.ResetCanvasButton.Text = "Reset Canvas";
             this.ResetCanvasButton.UseVisualStyleBackColor = true;
             this.ResetCanvasButton.Click += new System.EventHandler(this.ResetCanvasButton_Click);
-            // 
-            // showRaysButton
-            // 
-            this.showRaysButton.Location = new System.Drawing.Point(402, 12);
-            this.showRaysButton.Name = "showRaysButton";
-            this.showRaysButton.Size = new System.Drawing.Size(141, 25);
-            this.showRaysButton.TabIndex = 6;
-            this.showRaysButton.Text = "Show rays";
-            this.showRaysButton.UseVisualStyleBackColor = true;
-            this.showRaysButton.Click += new System.EventHandler(this.showRaysButton_Click);
             // 
             // ExtractFeaturesButton
             // 
@@ -236,11 +226,22 @@
             this.hiddenLayerNodesLabel.Size = new System.Drawing.Size(0, 13);
             this.hiddenLayerNodesLabel.TabIndex = 14;
             // 
+            // loadModelButton
+            // 
+            this.loadModelButton.Location = new System.Drawing.Point(100, 405);
+            this.loadModelButton.Name = "loadModelButton";
+            this.loadModelButton.Size = new System.Drawing.Size(82, 23);
+            this.loadModelButton.TabIndex = 15;
+            this.loadModelButton.Text = "Load Model";
+            this.loadModelButton.UseVisualStyleBackColor = true;
+            this.loadModelButton.Click += new System.EventHandler(this.loadModelButton_Click);
+            // 
             // UI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(561, 432);
+            this.Controls.Add(this.loadModelButton);
             this.Controls.Add(this.hiddenLayerNodesLabel);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.saveModelButton);
@@ -249,7 +250,6 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.ExtractFeaturesButton);
-            this.Controls.Add(this.showRaysButton);
             this.Controls.Add(this.ResetCanvasButton);
             this.Controls.Add(this.drawingPictureBox);
             this.Name = "UI";
@@ -266,7 +266,6 @@
         #endregion
         private System.Windows.Forms.PictureBox drawingPictureBox;
         private System.Windows.Forms.Button ResetCanvasButton;
-        private System.Windows.Forms.Button showRaysButton;
         private System.Windows.Forms.Button ExtractFeaturesButton;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label acuteAnglesLabel;
@@ -282,6 +281,7 @@
         private System.Windows.Forms.Button saveModelButton;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label hiddenLayerNodesLabel;
+        private System.Windows.Forms.Button loadModelButton;
     }
 }
 
