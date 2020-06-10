@@ -8,23 +8,23 @@ namespace BinarySynapticWeights
 {
     public class BSWNeuralNetwork : IBSWNeuralNetwork
     {
-        private readonly Model model;
+        public Model Model { get; set; }
 
         public BSWNeuralNetwork(Model model)
-        {
-            this.model = model;
+        {   
+            this.Model = model;
         }
 
         public string PredictClass(List<int> inputVector)
         {
-            if (model.OutputNodes.Count == 0)
+            if (Model.OutputNodes.Count == 0)
             {
                 throw new InvalidOperationException("Binary Synaptic Weights neural network is not trained");
             }
 
-            if (inputVector.Count != model.InputNodes.Count)
+            if (inputVector.Count != Model.InputNodes.Count)
             {
-                throw new ArgumentException($"{nameof(inputVector)} should have the same size as the samples used to train the network: {model.InputNodes.Count}");
+                throw new ArgumentException($"{nameof(inputVector)} should have the same size as the samples used to train the network: {Model.InputNodes.Count}");
             }
 
             ResetNodeValues();
@@ -40,12 +40,12 @@ namespace BinarySynapticWeights
 
         private void ResetNodeValues()
         {
-            foreach (var hiddenNode in model.HiddenNodes)
+            foreach (var hiddenNode in Model.HiddenNodes)
             {
                 hiddenNode.Reset();
             }
 
-            foreach (var outputNode in model.OutputNodes)
+            foreach (var outputNode in Model.OutputNodes)
             {
                 outputNode.Reset();
             }
@@ -53,15 +53,15 @@ namespace BinarySynapticWeights
 
         private void ApplyVectorOnInputNodes(List<int> inputVector)
         {
-            for (int i = 0; i < model.InputNodes.Count; i++)
+            for (int i = 0; i < Model.InputNodes.Count; i++)
             {
-                model.InputNodes[i].Value = inputVector[i];
+                Model.InputNodes[i].Value = inputVector[i];
             }
         }
 
         private void AddWeightsToHiddenNodes()
         {
-            foreach (var link in model.InputToHiddenSynapticLinks)
+            foreach (var link in Model.InputToHiddenSynapticLinks)
             {
                 link.AddWeightToHiddenNode();
             }
@@ -69,7 +69,7 @@ namespace BinarySynapticWeights
 
         private void ApplyActivationFunctionOnHiddenNodes()
         {
-            foreach (var hiddenNode in model.HiddenNodes)
+            foreach (var hiddenNode in Model.HiddenNodes)
             {
                 hiddenNode.ApplyActivationFunction();
             }
@@ -77,7 +77,7 @@ namespace BinarySynapticWeights
 
         private void AddWeightsToOutputNodes()
         {
-            foreach (var link in model.HiddenToOutputSynapticLinks)
+            foreach (var link in Model.HiddenToOutputSynapticLinks)
             {
                 link.AddWeightToOutputNode();
             }
@@ -85,7 +85,7 @@ namespace BinarySynapticWeights
 
         private void ApplyActivationFunctionOnOutputNodes()
         {
-            foreach (var outputNode in model.OutputNodes)
+            foreach (var outputNode in Model.OutputNodes)
             {
                 outputNode.ApplyActivationFunction();
             }
@@ -93,12 +93,12 @@ namespace BinarySynapticWeights
 
         private string GetActivatedOutputNodeClass()
         {
-            if (model.OutputNodes.Count(x => x.IsActivated) > 1)
+            if (Model.OutputNodes.Count(x => x.IsActivated) > 1)
             {
                 throw new Exception("More than 1 output node was activated");
             }
 
-            var activatedOutputNode = model.OutputNodes.FirstOrDefault(x => x.IsActivated);
+            var activatedOutputNode = Model.OutputNodes.FirstOrDefault(x => x.IsActivated);
             if (activatedOutputNode == null)
             {
                 throw new Exception("No output node was activated");
@@ -109,12 +109,12 @@ namespace BinarySynapticWeights
 
         private string GetTheMostActivatedOutputNodeClass()
         {
-            if (!model.OutputNodes.Any(x => x.IsActivated))
+            if (!Model.OutputNodes.Any(x => x.IsActivated))
             {
                 throw new Exception("No output node was activated");
             }
 
-            return model.OutputNodes.Where(x => x.IsActivated).OrderByDescending(x => Math.Abs(x.Value - x.Threshold) / x.Threshold).First().Class;
+            return Model.OutputNodes.Where(x => x.IsActivated).OrderByDescending(x => Math.Abs(x.Value - x.Threshold) / x.Threshold).First().Class;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using ShapeRecognition.FeatureExtraction.Contracts;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 
@@ -37,12 +38,20 @@ namespace ShapeRecognition.FeatureExtraction
             return significantPoints[significantPoints.Count - 1];
         }
 
+        public void AddSignificantPoint(Point point)
+        {
+            significantPoints.Add(point);
+
+            pointsSinceLastSignificantPoint = 0;
+            indexOfTheLastSignificantPoint = 0;
+        }
+
         public bool AppendPoint(Point point)
         {
             Point p1 = pointsOnStroke.Last();
             double distance = Math.Sqrt((point.X - p1.X) * (point.X - p1.X) + (point.Y - p1.Y) * (point.Y - p1.Y));
 
-            if (distance < 5)
+            if (distance < 10)
             {
                 return false;
             }
@@ -55,8 +64,9 @@ namespace ShapeRecognition.FeatureExtraction
             double MrMinusOne = CalculateMs(indexOfTheLastSignificantPoint, pointsOnStroke.Count - 2);
             double CurrentMr = CalculateMs(indexOfTheLastSignificantPoint, pointsOnStroke.Count - 1);
 
+            Debug.WriteLine($"{(int)CurrentMr} : {(int)MrMinusOne}");
             // if last but least point is significant
-            if (CurrentMr - MrMinusOne < - 50)
+            if (CurrentMr < MrMinusOne)
             {
                 pointsSinceLastSignificantPoint = 1;
                 significantPoints.Add(pointsOnStroke[pointsOnStroke.Count - 2]);
@@ -72,13 +82,13 @@ namespace ShapeRecognition.FeatureExtraction
             Point endPoint = pointsOnStroke[indexOfEndPoint];
             double segmentLength = Math.Sqrt(Math.Pow(endPoint.X - startPoint.X, 2) + Math.Pow(endPoint.Y - startPoint.Y, 2));
             double error = 0;
-            for (int i = indexOfStartPoint + 1; i < indexOfEndPoint; i++)
+            for (int i = indexOfStartPoint + 1; i <= indexOfEndPoint; i++)
             {
                 Point intermediatePoint = pointsOnStroke[i];
                 double firstTermOfNominator = (endPoint.Y - startPoint.Y) * intermediatePoint.X;
                 double secondTermOfNominator = (endPoint.X - startPoint.X) * intermediatePoint.Y;
-                double thirdTermOfNominator = startPoint.X * endPoint.Y;
-                double fourthTermOfNominator = endPoint.X * startPoint.Y;
+                double thirdTermOfNominator = endPoint.X * startPoint.Y;
+                double fourthTermOfNominator = startPoint.X * endPoint.Y;
                 double nominator = Math.Abs(firstTermOfNominator - secondTermOfNominator + thirdTermOfNominator - fourthTermOfNominator);
 
                 double firstTermOfDenominator = Math.Pow(endPoint.X - startPoint.X, 2);

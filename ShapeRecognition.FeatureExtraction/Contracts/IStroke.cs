@@ -8,6 +8,7 @@ namespace ShapeRecognition.FeatureExtraction.Contracts
         int GetNumberOfPoints();
         bool AppendPoint(Point point);
         List<Point> GetSignificantPoints();
-        Point GetLastSignificantPoint();
+        Point GetLastSignificantPoint(); 
+        void AddSignificantPoint(Point point);
     }
 }

@@ -15,7 +15,7 @@ namespace ShapeRecognition.FeatureExtraction
             this.divisions = divisions;
         }
 
-        public List<Point> GetSignificanPointsAfterRayIntersection(List<IStroke> shapeStrokes, Point centerOfGravity)
+        public List<Point> GetSignificanPointsAfterRayIntersection(List<IStroke> shapeStrokes, Point centerOfGravitY)
         {
             var significantPoints = new List<Point>();
             var segments = GetAllSegmentsFromStrokes(shapeStrokes);
@@ -23,27 +23,63 @@ namespace ShapeRecognition.FeatureExtraction
             var intervalAngles = (360.0 / divisions);
             foreach (var segment in segments)
             {
-                Point? intersectionPoint = null;
-
-                for (int i = 0; i < divisions; i++)
+                for (int i = 0; i < divisions / 2; i++)
                 {
                     var radians = (Math.PI / 180) * intervalAngles * i;
-                    var rayPoint = new Point((int)(centerOfGravity.X + scale * Math.Cos(radians)), (int)(centerOfGravity.Y + scale * Math.Sin(radians)));
+                    var raYPoint = new Point((int)(centerOfGravitY.X + scale * Math.Cos(radians)), (int)(centerOfGravitY.Y + scale * Math.Sin(radians)));
 
-                    var intersection = GetIntersectionPoint(centerOfGravity, rayPoint, segment.Item1, segment.Item2);
+                    var intersection = GetIntersectionPoint(centerOfGravitY, raYPoint, segment.Item1, segment.Item2);
 
                     if (intersection != null && IsPointOnSegment(segment.Item1, segment.Item2, intersection.Value))
-                        intersectionPoint = intersection;
+                    {
+                        significantPoints.Add(intersection.Value);
+                    }
                 }
+            }
 
-                if (intersectionPoint != null)
+            for (int i = 0; i < significantPoints.Count; i++)
+            {
+                for (int j = 0; j < significantPoints.Count; j++)
                 {
-                    significantPoints.Add(intersectionPoint.Value);
+                    var a = significantPoints[i];
+                    var b = significantPoints[j];
+
+                    if(Less(a, b, centerOfGravitY))
+                    {
+                        significantPoints[i] = b;
+                        significantPoints[j] = a;
+                    }
                 }
             }
 
             return significantPoints;
+        }
 
+        bool Less(Point a, Point b, Point center)
+        {
+            if (a.X - center.X >= 0 && b.X - center.X < 0)
+                return true;
+            if (a.X - center.X < 0 && b.X - center.X >= 0)
+                return false;
+            if (a.X - center.X == 0 && b.X - center.X == 0)
+            {
+                if (a.Y - center.Y >= 0 || b.Y - center.Y >= 0)
+                    return a.Y > b.Y;
+                return b.Y > a.Y;
+            }
+
+            // compute the cross product of vectors (center -> a) X (center -> b)
+            int det = (a.X - center.X) * (b.Y - center.Y) - (b.X - center.X) * (a.Y - center.Y);
+            if (det < 0)
+                return true;
+            if (det > 0)
+                return false;
+
+            // points a and b are on the same line from the center
+            // check which point is closer to the center
+            int d1 = (a.X - center.X) * (a.X - center.X) + (a.Y - center.Y) * (a.Y - center.Y);
+            int d2 = (b.X - center.X) * (b.X - center.X) + (b.Y - center.Y) * (b.Y - center.Y);
+            return d1 > d2;
         }
 
         public List<Tuple<Point, Point>> GetAllSegmentsFromStrokes(List<IStroke> shapeStrokes)
@@ -91,9 +127,9 @@ namespace ShapeRecognition.FeatureExtraction
             }
             else
             {
-                double x = (B2 * C1 - B1 * C2) / numitor;
-                double y = (A1 * C2 - A2 * C1) / numitor;
-                return new System.Drawing.Point(Convert.ToInt32(x), Convert.ToInt32(y));
+                double X = (B2 * C1 - B1 * C2) / numitor;
+                double Y = (A1 * C2 - A2 * C1) / numitor;
+                return new Point(Convert.ToInt32(X), Convert.ToInt32(Y));
             }
         }
 

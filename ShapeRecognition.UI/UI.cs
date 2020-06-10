@@ -28,7 +28,7 @@ namespace ShapeRecognition
         private List<Point> significantPointsAfterRayIntersection;
         private ShapeFeatures currentShapeFeatures;
 
-        private static readonly int numberOfRays = 32;
+        private static readonly int numberOfRays = 16;
         private static readonly CenterOfGravity CenterOfGravity = new CenterOfGravity();
         private static readonly RayIntersection RayIntersection = new RayIntersection(numberOfRays);
         private static readonly ShapeFeatureExtraction FeatureExtraction = new ShapeFeatureExtraction();
@@ -73,6 +73,10 @@ namespace ShapeRecognition
             {
                 currentStroke = new Stroke(e.Location);
                 lastDrawnPoint = e.Location;
+
+                graphics.FillRectangle(significantPointBrush, lastDrawnPoint.X - 4, lastDrawnPoint.Y - 4, 9, 9);
+
+                strokes.Add(currentStroke);
             }
         }
 
@@ -87,7 +91,7 @@ namespace ShapeRecognition
                 if (isNewSignificantPoint)
                 {
                     Point lastSignificant = currentStroke.GetLastSignificantPoint();
-                    graphics.FillRectangle(significantPointBrush, lastSignificant.X - 2, lastSignificant.Y - 2, 4, 4);
+                    graphics.FillRectangle(significantPointBrush, lastSignificant.X - 4, lastSignificant.Y - 4, 9, 9);
                 }
             }
         }
@@ -96,7 +100,9 @@ namespace ShapeRecognition
         {
             if (currentStroke.GetNumberOfPoints() > 1)
             {
-                strokes.Add(currentStroke);
+                currentStroke.AddSignificantPoint(e.Location);
+
+                graphics.FillRectangle(significantPointBrush, e.Location.X - 4, e.Location.Y - 4, 9, 9);
             }
         }
 
@@ -202,6 +208,8 @@ namespace ShapeRecognition
                 bswNeuralNetwork = new BSWNeuralNetwork(trainedModel);
             }
             catch (Exception e) { }
+
+            hiddenLayerNodesLabel.Text = "" + bswNeuralNetwork.Model.HiddenNodes.Count;
         }
 
         private void saveModelButton_Click(object sender, EventArgs e)

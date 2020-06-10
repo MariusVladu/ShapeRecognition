@@ -44,6 +44,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.recognizedShapeTypeLabel = new System.Windows.Forms.Label();
             this.saveModelButton = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.hiddenLayerNodesLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.drawingPictureBox)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -217,11 +219,30 @@
             this.saveModelButton.UseVisualStyleBackColor = true;
             this.saveModelButton.Click += new System.EventHandler(this.saveModelButton_Click);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(402, 327);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(135, 13);
+            this.label2.TabIndex = 13;
+            this.label2.Text = "BSW Hidden Layer Nodes:";
+            // 
+            // hiddenLayerNodesLabel
+            // 
+            this.hiddenLayerNodesLabel.AutoSize = true;
+            this.hiddenLayerNodesLabel.Location = new System.Drawing.Point(402, 344);
+            this.hiddenLayerNodesLabel.Name = "hiddenLayerNodesLabel";
+            this.hiddenLayerNodesLabel.Size = new System.Drawing.Size(0, 13);
+            this.hiddenLayerNodesLabel.TabIndex = 14;
+            // 
             // UI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(561, 432);
+            this.Controls.Add(this.hiddenLayerNodesLabel);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.saveModelButton);
             this.Controls.Add(this.recognizedShapeTypeLabel);
             this.Controls.Add(this.label1);
@@ -259,6 +280,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label recognizedShapeTypeLabel;
         private System.Windows.Forms.Button saveModelButton;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label hiddenLayerNodesLabel;
     }
 }
 
